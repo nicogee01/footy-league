@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>League Standings</title>
+<meta name="description" content="Live standings for our fantasy football league, powered by Sleeper." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --field-deep: #16302a;
+    --field-mid: #1f4739;
+    --field-line: rgba(241, 250, 238, 0.14);
+    --chalk: #f1faee;
+    --chalk-dim: rgba(241, 250, 238, 0.68);
+    --goalpost: #ffb703;
+    --scoreboard-red: #e0574a;
+    --panel: rgba(241, 250, 238, 0.05);
+    --panel-border: rgba(241, 250, 238, 0.12);
+    --font-display: "Anton", sans-serif;
+    --font-body: "IBM Plex Sans", sans-serif;
+    --font-mono: "IBM Plex Mono", monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--chalk);
+    background:
+      repeating-linear-gradient(
+        90deg,
+        var(--field-line) 0px,
+        var(--field-line) 1px,
+        transparent 1px,
+        transparent 96px
+      ),
+      radial-gradient(ellipse 120% 60% at 50% -10%, var(--field-mid) 0%, var(--field-deep) 60%);
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+
+  a { color: var(--goalpost); }
+
+  .wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 56px 24px 40px;
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2.4rem, 7vw, 4rem);
+    line-height: 0.98;
+    margin: 0 0 12px;
+    letter-spacing: 0.5px;
+  }
+
+  .hero p {
+    margin: 0;
+    color: var(--chalk-dim);
+    font-size: 1.05rem;
+    max-width: 46ch;
+  }
+
+  .hero .tag {
+    display: inline-block;
+    margin-bottom: 18px;
+    padding: 5px 12px;
+    border: 1px solid var(--panel-border);
+    border-radius: 999px;
+    font-size: 0.8rem;
+    color: var(--chalk-dim);
+  }
+
+  main { margin-top: 44px; }
+
+  .panel-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .panel-head h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.7rem;
+    margin: 0;
+    letter-spacing: 0.3px;
+  }
+
+  .panel-note {
+    color: var(--chalk-dim);
+    font-size: 0.85rem;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    background: var(--panel);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 560px;
+  }
+
+  thead th {
+    text-align: left;
+    font-weight: 500;
+    font-size: 0.78rem;
+    color: var(--chalk-dim);
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid var(--panel-border);
+  }
+
+  thead th.num, td.num {
+    text-align: right;
+    font-family: var(--font-mono);
+  }
+
+  tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--panel-border);
+    font-size: 0.95rem;
+    vertical-align: middle;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  tbody tr.leader { background: rgba(255, 183, 3, 0.07); }
+
+  tbody tr.leader td:first-child {
+    box-shadow: inset 3px 0 0 var(--goalpost);
+  }
+
+  td.rank {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    color: var(--chalk-dim);
+    width: 36px;
+  }
+
+  .team-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    object-fit: cover;
+    background: var(--field-mid);
+  }
+
+  .avatar-fallback {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--field-deep);
+  }
+
+  .team-name { font-weight: 500; }
+  .team-owner { font-size: 0.8rem; color: var(--chalk-dim); }
+
+  td.record { font-family: var(--font-mono); white-space: nowrap; }
+
+  .diff-pos { color: #8fd6b4; }
+  .diff-neg { color: var(--scoreboard-red); }
+
+  .skeleton-row td {
+    padding: 14px 16px;
+  }
+  .skeleton-bar {
+    height: 14px;
+    border-radius: 5px;
+    background: var(--panel-border);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .skeleton-bar {
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  .state-message {
+    padding: 28px 20px;
+    color: var(--chalk-dim);
+    font-size: 0.95rem;
+  }
+  .state-message strong { color: var(--chalk); display: block; margin-bottom: 4px; }
+
+  footer {
+    margin-top: 36px;
+    color: var(--chalk-dim);
+    font-size: 0.82rem;
+  }
+
+  footer p { margin: 4px 0; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <span class="tag" id="season-tag">Loading season…</span>
+      <h1 id="league-name">Loading league</h1>
+      <p id="league-sub">Fetching the latest data from Sleeper.</p>
+    </header>
+
+    <main>
+      <div class="panel-head">
+        <h2>Standings</h2>
+        <span class="panel-note" id="tiebreak-note"></span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Team</th>
+              <th class="num">Record</th>
+              <th class="num">PF</th>
+              <th class="num">PA</th>
+              <th class="num">Diff</th>
+            </tr>
+          </thead>
+          <tbody id="standings-body">
+            <tr class="skeleton-row"><td colspan="6"><div class="skeleton-bar"></div></td></tr>
+            <tr class="skeleton-row"><td colspan="6"><div class="skeleton-bar"></div></td></tr>
+            <tr class="skeleton-row"><td colspan="6"><div class="skeleton-bar"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <footer>
+      <p>Standings update automatically from Sleeper whenever this page loads.</p>
+      <p id="updated-at"></p>
+    </footer>
+  </div>
+
+<script>
+  // Set this to your league's Sleeper ID. Find it in your league's URL on sleeper.app.
+  const LEAGUE_ID = "1387553090483273728";
+
+  const el = (id) => document.getElementById(id);
+
+  function teamName(user) {
+    if (!user) return "Unclaimed Team";
+    return (user.metadata && user.metadata.team_name) || user.display_name || "Unnamed Team";
+  }
+
+  function avatarUrl(user) {
+    if (user && user.avatar) {
+      return "https://sleepercdn.com/avatars/thumbs/" + user.avatar;
+    }
+    return null;
+  }
+
+  function initials(name) {
+    const words = name.trim().split(/\s+/).slice(0, 2);
+    return words.map((w) => w[0].toUpperCase()).join("");
+  }
+
+  function colorForName(name) {
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = Math.abs(hash) % 360;
+    return "hsl(" + hue + ", 62%, 72%)";
+  }
+
+  function centsToDecimal(whole, cents) {
+    return (whole || 0) + (cents || 0) / 100;
+  }
+
+  function statusCopy(status, totalRosters) {
+    switch (status) {
+      case "pre_draft":
+        return totalRosters + " teams are set and waiting on the draft.";
+      case "drafting":
+        return "The draft is underway for " + totalRosters + " teams.";
+      case "in_season":
+        return totalRosters + " teams, mid-season. Every week moves the board.";
+      case "complete":
+        return "Season complete for all " + totalRosters + " teams.";
+      default:
+        return totalRosters + " teams in the league.";
+    }
+  }
+
+  async function loadLeague() {
+    try {
+      const [league, rosters, users] = await Promise.all([
+        fetch("https://api.sleeper.app/v1/league/" + LEAGUE_ID).then((r) => {
+          if (!r.ok) throw new Error("League fetch failed (" + r.status + ")");
+          return r.json();
+        }),
+        fetch("https://api.sleeper.app/v1/league/" + LEAGUE_ID + "/rosters").then((r) => {
+          if (!r.ok) throw new Error("Rosters fetch failed (" + r.status + ")");
+          return r.json();
+        }),
+        fetch("https://api.sleeper.app/v1/league/" + LEAGUE_ID + "/users").then((r) => {
+          if (!r.ok) throw new Error("Users fetch failed (" + r.status + ")");
+          return r.json();
+        }),
+      ]);
+
+      renderHeader(league);
+      renderStandings(rosters, users);
+
+      el("updated-at").textContent = "Last loaded " + new Date().toLocaleString();
+    } catch (err) {
+      console.error(err);
+      renderError();
+    }
+  }
+
+  function renderHeader(league) {
+    el("league-name").textContent = league.name || "Fantasy League";
+    el("season-tag").textContent = "Season " + league.season;
+    el("league-sub").textContent = statusCopy(league.status, league.total_rosters);
+  }
+
+  function renderStandings(rosters, users) {
+    const usersById = {};
+    users.forEach((u) => { usersById[u.user_id] = u; });
+
+    const rows = rosters.map((roster) => {
+      const user = usersById[roster.owner_id];
+      const s = roster.settings || {};
+      const pf = centsToDecimal(s.fpts, s.fpts_decimal);
+      const pa = centsToDecimal(s.fpts_against, s.fpts_against_decimal);
+      return {
+        name: teamName(user),
+        owner: user ? user.display_name : null,
+        avatar: avatarUrl(user),
+        wins: s.wins || 0,
+        losses: s.losses || 0,
+        ties: s.ties || 0,
+        pf: pf,
+        pa: pa,
+      };
+    });
+
+    rows.sort((a, b) => (b.wins - a.wins) || (b.pf - a.pf));
+
+    const tbody = el("standings-body");
+    tbody.innerHTML = "";
+
+    if (rows.length === 0) {
+      renderError();
+      return;
+    }
+
+    el("tiebreak-note").textContent = "Sorted by wins, then points scored.";
+
+    rows.forEach((row, i) => {
+      const tr = document.createElement("tr");
+      if (i === 0) tr.className = "leader";
+
+      const diff = row.pf - row.pa;
+      const diffClass = diff > 0 ? "diff-pos" : diff < 0 ? "diff-neg" : "";
+      const diffText = (diff > 0 ? "+" : "") + diff.toFixed(1);
+
+      const avatarHtml = row.avatar
+        ? '<img class="avatar" src="' + row.avatar + '" alt="" />'
+        : '<div class="avatar-fallback" style="background:' + colorForName(row.name) + '">' + initials(row.name) + "</div>";
+
+      const ownerHtml = row.owner ? '<div class="team-owner">' + row.owner + "</div>" : "";
+
+      tr.innerHTML =
+        '<td class="rank">' + (i + 1) + "</td>" +
+        '<td><div class="team-cell">' + avatarHtml +
+          '<div><div class="team-name">' + row.name + "</div>" + ownerHtml + "</div>" +
+        "</div></td>" +
+        '<td class="record num">' + row.wins + "-" + row.losses + (row.ties ? "-" + row.ties : "") + "</td>" +
+        '<td class="num">' + row.pf.toFixed(1) + "</td>" +
+        '<td class="num">' + row.pa.toFixed(1) + "</td>" +
+        '<td class="num ' + diffClass + '">' + diffText + "</td>";
+
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderError() {
+    el("league-sub").textContent = "Couldn't load live data right now.";
+    el("standings-body").innerHTML =
+      '<tr><td colspan="6"><div class="state-message"><strong>Standings aren\u2019t loading.</strong>' +
+      "Check that the league ID near the top of the page's script matches your Sleeper league, " +
+      "and that you have an internet connection, then reload the page.</div></td></tr>";
+  }
+
+  loadLeague();
+</script>
+</body>
+</html>
