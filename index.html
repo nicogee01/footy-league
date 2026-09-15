@@ -96,7 +96,12 @@
     background:transparent;border:none;color:var(--chalk-dim);padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;letter-spacing:.02em;
   }
   .toggle-group button.active{background:var(--gold);color:var(--field);}
+  .standings-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
   table.standings{width:100%;border-collapse:collapse;font-size:14px;}
+  table.standings th:first-child,table.standings td:first-child{position:sticky;left:0;background:var(--field);z-index:2;width:44px;}
+  table.standings th:nth-child(2),table.standings td:nth-child(2){position:sticky;left:44px;background:var(--field);z-index:2;box-shadow:3px 0 6px -2px rgba(0,0,0,0.5);}
+  table.standings tbody tr:hover td:first-child,table.standings tbody tr:hover td:nth-child(2){background:#17140f;}
+  table.standings tbody tr.wildcard-row td:first-child,table.standings tbody tr.wildcard-row td:nth-child(2){background:#1c1a10;}
   table.standings thead th{
     text-align:left;color:var(--chalk-dimmer);font-weight:600;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;
     padding:0 10px 10px;border-bottom:1px solid var(--line-strong);
@@ -248,8 +253,8 @@
   .bracket-vs{font-size:10px;letter-spacing:.07em;color:var(--chalk-dimmer);text-align:center;border-top:1px dashed var(--line);border-bottom:1px dashed var(--line);padding:7px 0;}
 
   @media (max-width:900px){
-    .bracket{flex-direction:column;overflow-x:visible;gap:28px;}
-    .bracket-col{min-width:100%;gap:16px;}
+    .bracket{gap:32px;}
+    .bracket-col{min-width:220px;gap:60px;}
     .bracket-seed-wildcard{margin:0 -14px;padding:20px 14px;}
     .bracket-match{padding:6px 14px;}
   }
@@ -266,9 +271,6 @@
   footer{border-top:1px solid var(--line);padding:20px 0;text-align:center;color:var(--chalk-dimmer);font-size:11.5px;}
 
   @media (max-width:640px){
-    table.standings thead th:nth-child(4),table.standings td:nth-child(4),
-    table.standings thead th:nth-child(6),table.standings td:nth-child(6),
-    table.standings thead th:nth-child(7),table.standings td:nth-child(7){display:none;}
     .h2h-pts{display:none;}
   }
 
@@ -297,12 +299,14 @@
     .chart-legend{font-size:10.5px;gap:5px 12px;}
 
     /* standings */
-    table.standings{font-size:12px;}
+    table.standings{font-size:12px;min-width:560px;}
     table.standings thead th{padding:0 5px 7px;font-size:9px;}
     table.standings td{padding:9px 5px;}
+    table.standings th:first-child,table.standings td:first-child{width:36px;}
+    table.standings th:nth-child(2),table.standings td:nth-child(2){left:36px;max-width:148px;overflow:hidden;}
     .avatar{width:30px;height:30px;}
     .avatar-fallback{width:30px;height:30px;font-size:10.5px;}
-    .team-name{font-size:12px;}
+    .team-name{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
     .owner-name{display:none;}
     .rank-chip{font-size:13px;}
     .rank-chip.rank-glyph{font-size:16px;}
@@ -368,7 +372,7 @@
     .bracket-seed-num{font-size:13px;width:18px;}
     .bracket-seed-name{font-size:12px;}
     .bracket-round-label{font-size:9.5px;}
-    .bracket-col{gap:18px;}
+    .bracket-col{gap:44px;min-width:200px;}
     .bracket-seed-wildcard{margin:0 -12px;padding:12px 12px;}
     .wildcard-tag-sm{font-size:8px;padding:1px 4px;}
     .bye-tag{font-size:8px;padding:1px 4px;}
@@ -1122,7 +1126,7 @@ function renderStandings(){
     tbody.appendChild(tr);
   });
   table.appendChild(tbody);
-  app.appendChild(table);
+  app.appendChild(el("div", {class:"standings-table-wrap"}, [table]));
 
   app.appendChild(el("div", {class:"foot-note"}, [
     standingsMode === "season"
