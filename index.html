@@ -271,6 +271,115 @@
     table.standings thead th:nth-child(7),table.standings td:nth-child(7){display:none;}
     .h2h-pts{display:none;}
   }
+
+  /* ================= MOBILE (desktop layout is untouched above 680px) ================= */
+  @media (max-width:680px){
+    .wrap{padding:0 14px;}
+
+    /* masthead / nav */
+    .masthead{padding-top:22px;}
+    .masthead-inner{padding-bottom:14px;gap:10px;}
+    .league-name{font-size:26px;}
+    .league-sub{font-size:11px;margin-top:6px;}
+    .season-pill{font-size:10.5px;padding:5px 10px;}
+    nav.tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;}
+    nav.tabs a{padding:11px 13px;font-size:12.5px;white-space:nowrap;flex-shrink:0;}
+    main{padding:18px 0 50px;}
+
+    /* generic headers/toggles */
+    .panel-head{flex-direction:column;align-items:stretch;gap:10px;margin-bottom:14px;}
+    .panel-head h2{font-size:17px;}
+    .toggle-group{align-self:stretch;}
+    .toggle-group button{flex:1;padding:8px 6px;font-size:11.5px;}
+    select.ctrl{width:100%;}
+    .section-title{font-size:11.5px;margin:26px 0 12px;}
+    .analytics-intro{font-size:11.5px;}
+    .chart-legend{font-size:10.5px;gap:5px 12px;}
+
+    /* standings */
+    table.standings{font-size:12px;}
+    table.standings thead th{padding:0 5px 7px;font-size:9px;}
+    table.standings td{padding:9px 5px;}
+    .avatar{width:30px;height:30px;}
+    .avatar-fallback{width:30px;height:30px;font-size:10.5px;}
+    .team-name{font-size:12px;}
+    .owner-name{display:none;}
+    .rank-chip{font-size:13px;}
+    .rank-chip.rank-glyph{font-size:16px;}
+    .wildcard-tag{font-size:8.5px;padding:2px 5px;margin-left:5px;}
+    .badge-max{white-space:nowrap;}
+    .foot-note{font-size:10.5px;}
+
+    /* team detail */
+    .back-link{font-size:12px;margin-bottom:14px;}
+    .team-header{gap:12px;padding-bottom:16px;margin-bottom:18px;}
+    .avatar-lg{width:80px;height:80px;border-width:2px;}
+    .avatar-lg-fallback{width:80px;height:80px;font-size:24px;border-width:2px;}
+    .team-header h2{font-size:20px;}
+    .team-header .owner-name{display:block;font-size:11.5px;}
+    .stat-strip{gap:10px 16px;margin-top:8px;}
+    .stat-strip .stat{font-size:11px;}
+    .stat-strip .stat b{font-size:14px;}
+    .streak-badge{font-size:10.5px;padding:3px 8px;}
+    .roster-grid{grid-template-columns:repeat(auto-fill, minmax(74px,1fr));gap:8px;}
+    .player-card{padding:8px 5px;}
+    .player-img{width:42px;height:42px;margin-bottom:6px;}
+    .player-name{font-size:10.5px;}
+    .player-meta{font-size:9.5px;}
+    .roster-sub{font-size:10px;margin:16px 0 8px;}
+    .h2h-row{padding:9px 10px;gap:9px;}
+    .h2h-row .avatar,.h2h-row .avatar-fallback{width:26px;height:26px;font-size:10px;}
+    .h2h-name{font-size:12.5px;}
+    .h2h-record{font-size:14px;}
+
+    /* records */
+    .record-row{gap:12px;padding:16px 0;}
+    .avatar-md{width:54px;height:54px;border-width:1px;}
+    .avatar-md-fallback{width:54px;height:54px;font-size:17px;border-width:1px;}
+    .record-avatars .avatar-md,.record-avatars .avatar-md-fallback{margin-left:-14px;}
+    .record-avatars .avatar-md:first-child,.record-avatars .avatar-md-fallback:first-child{margin-left:0;}
+    .record-label{font-size:10px;}
+    .record-value{font-size:27px;margin:3px 0 2px;}
+    .record-name{font-size:13px;}
+    .record-ctx{font-size:10.5px;}
+    .champs-row{font-size:12px;padding:9px 10px;}
+
+    /* analytics: scatter */
+    .scatter-wrap{padding-bottom:100%;}
+    .scatter-avatar{width:36px;height:36px;}
+    .scatter-avatar-fb{width:36px;height:36px;font-size:11px;}
+
+    /* analytics: heatmap */
+    .heat-cell{min-width:76px;padding:8px 4px;}
+    .heat-val{font-size:14px;}
+    .heat-rank{font-size:8.5px;}
+    .heat-table thead th{font-size:9px;}
+    .heat-table td.heat-name{padding:6px;font-size:12px;}
+
+    /* analytics: ridge plot */
+    .ridge-row{gap:8px;}
+    .ridge-label{width:76px;font-size:10.5px;}
+    .ridge-axis{margin-left:84px;font-size:10px;}
+
+    /* playoff bracket */
+    .bracket-match{padding:8px 12px;}
+    .bracket-seed{padding:12px 0;gap:8px;}
+    .bracket-seed .avatar,.bracket-seed .avatar-fallback{width:26px;height:26px;font-size:9.5px;}
+    .bracket-seed-num{font-size:13px;width:18px;}
+    .bracket-seed-name{font-size:12px;}
+    .bracket-round-label{font-size:9.5px;}
+    .bracket-col{gap:18px;}
+    .bracket-seed-wildcard{margin:0 -12px;padding:12px 12px;}
+    .wildcard-tag-sm{font-size:8px;padding:1px 4px;}
+    .bye-tag{font-size:8px;padding:1px 4px;}
+
+    /* on the bubble */
+    .bubble-card{flex:0 0 128px;padding:12px 10px;}
+    .bubble-card .avatar,.bubble-card .avatar-fallback{width:38px;height:38px;font-size:12px;margin-bottom:8px;}
+    .bubble-card-gap{font-size:19px;}
+    .bubble-card-name{font-size:11px;margin-bottom:5px;}
+    .bubble-card-note{font-size:9px;}
+  }
 </style>
 </head>
 <body>
