@@ -108,10 +108,9 @@
   table.standings tbody tr{cursor:pointer;transition:background .12s;}
   table.standings tbody tr:hover{background:rgba(231,184,78,0.06);}
   .rank-chip{
-    display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;
-    border:1px solid var(--line-strong);color:var(--chalk-dim);font-weight:700;font-size:12px;font-family:'Anton',sans-serif;
+    color:var(--chalk);font-weight:700;font-size:16px;font-family:'Anton',sans-serif;letter-spacing:.02em;
   }
-  tr[data-rank="1"] .rank-chip{border-color:var(--gold);color:var(--gold);}
+  .rank-chip.rank-glyph{font-size:20px;font-weight:400;}
   .standings-divider td{padding:6px 10px;border-bottom:none;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--chalk-dimmer);text-align:center;border-top:2px solid var(--gold-dim);border-bottom:1px dashed var(--line);background:rgba(111,168,245,0.05);}
   .wildcard-row{background:rgba(231,184,78,0.10);box-shadow:inset 3px 0 0 var(--gold);}
   .wildcard-row:hover{background:rgba(231,184,78,0.17);}
@@ -234,7 +233,7 @@
 
   /* ---------- playoff bracket ---------- */
   .bracket{display:flex;gap:56px;overflow-x:auto;padding:10px 4px 16px;align-items:stretch;}
-  .bracket-col{display:flex;flex-direction:column;justify-content:space-around;gap:52px;min-width:270px;flex-shrink:0;}
+  .bracket-col{display:flex;flex-direction:column;justify-content:center;gap:80px;min-width:270px;flex-shrink:0;}
   .bracket-col-final{justify-content:center;}
   .bracket-round-label{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--gold-dim);font-weight:600;margin-bottom:8px;}
   .bracket-match{border:1px solid var(--line-strong);background:var(--field2);padding:10px 20px;}
@@ -834,12 +833,22 @@ function updateNavActive(hash){
 
 /* ============================= RENDER: STANDINGS ============================= */
 var standingsMode = "season";
+var standingsSeasonIdx = null;
+
+function rankGlyph(rank, total){
+  if (rank === 1) return "🥇";
+  if (rank === 2) return "🥈";
+  if (rank === 3) return "🥉";
+  if (rank === total) return "💩";
+  if (rank === total - 1) return "🗑️";
+  return String(rank);
+}
 
 var standingsSortKey = "wins";
 var standingsSortDir = "desc";
 
-function buildSeasonStandingsRows(){
-  var season = STATE.currentSeason;
+function buildSeasonStandingsRows(season){
+  season = season || STATE.currentSeason;
   var seasonYear = season.league.season;
   var apMap = STATE.seasonAllPlay[season.league.league_id] || {};
   var rows = season.rosters.map(function(r){
@@ -898,21 +907,40 @@ var STANDINGS_COLS = [
   {key:"maxpf", label:"Max PF"}
 ];
 
+function buildSeasonPickerSelect(){
+  var sel = el("select", {class:"ctrl", onchange:function(e){ standingsSeasonIdx = parseInt(e.target.value,10); renderStandings(); }});
+  for (var i=STATE.seasons.length-1;i>=0;i--){
+    var opt = el("option", {value:i}, [STATE.seasons[i].league.season]);
+    if (i === standingsSeasonIdx) opt.selected = true;
+    sel.appendChild(opt);
+  }
+  return sel;
+}
+
 function renderStandings(){
   var app = $("#app");
   app.innerHTML = "";
 
-  var head = el("div", {class:"panel-head"}, [
-    el("h2", {style:"font-size:20px;"}, ["Standings"]),
+  if (standingsSeasonIdx == null) standingsSeasonIdx = STATE.seasons.length - 1;
+  var selectedSeason = STATE.seasons[standingsSeasonIdx];
+  var isLatestSeason = selectedSeason === STATE.currentSeason;
+
+  var headControls = [
     el("div", {class:"toggle-group"}, [
-      el("button", {class: standingsMode==="season" ? "active" : "", onclick:function(){ standingsMode="season"; renderStandings(); }}, ["This Season"]),
+      el("button", {class: standingsMode==="season" ? "active" : "", onclick:function(){ standingsMode="season"; renderStandings(); }}, ["By Season"]),
       el("button", {class: standingsMode==="alltime" ? "active" : "", onclick:function(){ standingsMode="alltime"; renderStandings(); }}, ["All-Time"])
     ])
+  ];
+  if (standingsMode === "season" && STATE.seasons.length > 1) headControls.push(buildSeasonPickerSelect());
+
+  var head = el("div", {class:"panel-head"}, [
+    el("h2", {style:"font-size:20px;"}, ["Standings"]),
+    el("div", {class:"panel-head-controls"}, headControls)
   ]);
   app.appendChild(head);
 
   // rows in true-standings order (this defines each team's official rank, regardless of column sort)
-  var baseRows = standingsMode === "season" ? buildSeasonStandingsRows() : buildAllTimeStandingsRows();
+  var baseRows = standingsMode === "season" ? buildSeasonStandingsRows(selectedSeason) : buildAllTimeStandingsRows();
   baseRows.forEach(function(r,i){ r.defaultRank = i+1; });
 
   // star: the top scorer sitting outside the top 5 (season view only)
@@ -966,7 +994,11 @@ function renderStandings(){
     }
     var isStar = r.uid === starUid;
     var tr = el("tr", {"data-rank": r.defaultRank, class: isStar ? "wildcard-row" : "", onclick:function(){ if (r.uid) location.hash = "#team/" + r.uid; }});
-    tr.appendChild(el("td", {}, [el("span", {class:"rank-chip"}, [String(r.defaultRank)])]));
+    tr.appendChild(el("td", {}, [(function(){
+      var glyph = rankGlyph(r.defaultRank, baseRows.length);
+      var isGlyph = glyph !== String(r.defaultRank);
+      return el("span", {class:"rank-chip" + (isGlyph ? " rank-glyph" : "")}, [glyph]);
+    })()]));
     var nameWrap = el("div", {}, [
       el("div", {class:"team-name"}, [teamName(r.u), isStar ? el("span",{class:"wildcard-tag", title:"Highest points scorer outside the top 5 — the wild-card"},["★ Wild Card"]) : null]),
       el("div", {class:"owner-name"}, [r.u ? (r.u.display_name||"") : "Vacant"])
@@ -985,17 +1017,21 @@ function renderStandings(){
 
   app.appendChild(el("div", {class:"foot-note"}, [
     standingsMode === "season"
-      ? "Showing " + STATE.currentSeason.league.season + " regular-season totals. All-Play shows each team's record if it had played every other team every week. The ★ marks the highest scorer outside the top 5 — this league's wild-card. Click a column header to sort; click any team for head-to-head records and roster."
+      ? "Showing " + selectedSeason.league.season + " regular-season totals. All-Play shows each team's record if it had played every other team every week. The ★ marks the highest scorer outside the top 5 — this league's wild-card. Click a column header to sort; click any team for head-to-head records and roster."
       : "All-time totals across every season found in this league's history. Click a column header to sort; click any team for details."
   ]));
 
-  app.appendChild(buildPlayoffBracket());
+  if (standingsMode === "season"){
+    app.appendChild(buildPlayoffBracket(selectedSeason, isLatestSeason));
+  } else {
+    app.appendChild(buildPlayoffBracket(STATE.currentSeason, true));
+  }
 }
 
-function buildPlayoffBracket(){
+function buildPlayoffBracket(season, isLatest){
   var wrap = el("div", {});
-  wrap.appendChild(el("div", {class:"section-title"}, ["Playoff Picture"]));
-  var rows = buildSeasonStandingsRows();
+  wrap.appendChild(el("div", {class:"section-title"}, ["Playoff Picture" + (isLatest ? "" : " — " + season.league.season)]));
+  var rows = buildSeasonStandingsRows(season);
   if (rows.length < 6){
     wrap.appendChild(el("div", {class:"foot-note"}, ["Not enough teams to project a bracket."]));
     return wrap;
@@ -1005,7 +1041,8 @@ function buildPlayoffBracket(){
   var star = rest.reduce(function(best,r){ return (!best || r.pf>best.pf) ? r : best; }, null);
   seeds.push(star);
 
-  wrap.appendChild(el("div", {class:"analytics-intro"}, ["If the season ended today: the top 5 by record make it, plus " + teamName(star.u) + " (★) as the points-leader wild card. Seeds 1 and 2 get a bye to the semifinals, where 1 faces whichever surviving team ends up the lower seed, and 2 faces the higher remaining seed."]));
+  var introLead = isLatest ? "If the season ended today: " : "Based on " + season.league.season + " regular-season standings: ";
+  wrap.appendChild(el("div", {class:"analytics-intro"}, [introLead + "the top 5 by record make it, plus " + teamName(star.u) + " (★) as the points-leader wild card. Seeds 1 and 2 get a bye to the semifinals, where 1 faces whichever surviving team ends up the lower seed, and 2 faces the higher remaining seed."]));
 
   function seedSlot(seed, row){
     return el("div", {class:"bracket-seed" + (seed===6 ? " bracket-seed-wildcard" : "")}, [
