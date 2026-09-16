@@ -51,6 +51,8 @@
     padding:36px 0 0;
   }
   .masthead-inner{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;padding-bottom:22px;}
+  .masthead-title{display:flex;align-items:center;gap:16px;}
+  .league-logo{width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid var(--gold-dim);background:var(--field3);flex-shrink:0;}
   .league-name{font-size:clamp(32px,6vw,56px);line-height:0.95;}
   .league-sub{color:var(--chalk-dim);font-size:13px;letter-spacing:0.04em;margin-top:8px;}
   .season-pill{
@@ -179,17 +181,42 @@
   .player-meta{font-size:10.5px;color:var(--chalk-dimmer);margin-top:2px;}
 
   /* ---------- records ---------- */
-  .records-list{display:flex;flex-direction:column;}
+  .records-list{display:flex;flex-direction:column;margin-bottom:8px;}
   .record-row{display:flex;align-items:center;gap:22px;padding:22px 0;border-bottom:1px solid var(--line);}
   .record-row:first-child{padding-top:4px;}
+  .record-row-clickable{cursor:pointer;}
+  .record-row-clickable:hover{background:rgba(111,168,245,0.05);}
   .record-avatars{display:flex;flex-shrink:0;}
   .record-avatars .avatar-md,.record-avatars .avatar-md-fallback{margin-left:-18px;}
   .record-avatars .avatar-md:first-child,.record-avatars .avatar-md-fallback:first-child{margin-left:0;}
-  .record-body{min-width:0;}
+  .record-body{min-width:0;flex:1;}
   .record-label{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-dim);font-weight:600;}
   .record-value{font-family:'Anton',sans-serif;font-size:40px;margin:4px 0 2px;line-height:1;}
   .record-name{font-size:15px;font-weight:600;color:var(--chalk);}
   .record-ctx{font-size:12px;color:var(--chalk-dimmer);margin-top:3px;}
+  .record-expand-hint{flex-shrink:0;font-size:11px;color:var(--gold-dim);font-weight:700;white-space:nowrap;padding-left:12px;letter-spacing:.02em;}
+
+  .record-sub-list{display:flex;flex-direction:column;margin:-6px 0 12px;padding-left:24px;border-left:2px solid var(--line-strong);}
+  .record-sub-row{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:12.5px;cursor:pointer;}
+  .record-sub-row:hover .record-sub-name{color:var(--chalk);}
+  .record-sub-rank{color:var(--chalk-dimmer);font-family:'Anton',sans-serif;width:16px;flex-shrink:0;font-size:13px;}
+  .record-sub-row .avatar,.record-sub-row .avatar-fallback{width:26px;height:26px;font-size:10px;}
+  .record-sub-name{flex:1;min-width:0;font-weight:600;color:var(--chalk-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .record-sub-value{font-family:'Anton',sans-serif;color:var(--chalk);font-size:14px;flex-shrink:0;}
+  .record-sub-ctx{color:var(--chalk-dimmer);font-size:10.5px;flex-shrink:0;max-width:220px;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+  /* ---------- league awards ---------- */
+  .award-season{margin-bottom:24px;}
+  .award-season-year{font-family:'Anton',sans-serif;color:var(--gold);font-size:19px;margin-bottom:10px;}
+  .award-podium{display:flex;gap:12px;flex-wrap:wrap;}
+  .award-card{border:1px solid var(--line-strong);background:var(--field2);padding:16px;min-width:170px;flex:1 1 170px;cursor:pointer;text-align:center;}
+  .award-card:hover{border-color:var(--gold-dim);}
+  .award-emoji{font-size:24px;}
+  .award-card .avatar,.award-card .avatar-fallback{display:block;margin:8px auto 6px;}
+  .award-name{font-size:14px;font-weight:600;}
+  .award-label{font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--chalk-dimmer);margin-top:3px;}
+  .award-players{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);text-align:left;}
+  .award-player-row{font-size:11px;color:var(--chalk-dim);padding:2px 0;}
 
   .champs-list{display:flex;flex-direction:column;gap:1px;background:var(--line);margin-top:6px;}
   .champs-row{background:var(--field);display:flex;align-items:center;gap:10px;padding:10px 12px;font-size:13.5px;}
@@ -235,6 +262,20 @@
   .ridge-label{width:130px;flex-shrink:0;font-size:12.5px;color:var(--chalk-dim);text-align:right;font-weight:600;}
   .ridge-svg-wrap{flex:1;min-width:0;}
   .ridge-axis{display:flex;margin-left:144px;color:var(--chalk-dimmer);font-size:11px;justify-content:space-between;margin-top:6px;}
+
+  /* ---------- box & whisker plot ---------- */
+  .boxplot-wrap{display:flex;border:1px solid var(--line-strong);background:var(--field2);padding:20px 16px 14px;overflow-x:auto;}
+  .boxplot-axis{position:relative;width:34px;flex-shrink:0;margin-right:8px;}
+  .boxplot-tick{position:absolute;right:6px;transform:translateY(-50%);font-size:10px;color:var(--chalk-dimmer);white-space:nowrap;}
+  .boxplot-row{display:flex;align-items:flex-end;gap:20px;border-left:1px solid var(--line);padding-left:14px;}
+  .boxplot-col{display:flex;flex-direction:column;align-items:center;flex:0 0 56px;cursor:pointer;}
+  .boxplot-chart{position:relative;width:32px;flex-shrink:0;}
+  .boxplot-whisker{position:absolute;left:50%;width:2px;background:var(--chalk-dimmer);transform:translateX(-50%);}
+  .boxplot-cap{position:absolute;left:50%;width:14px;height:2px;background:var(--chalk-dimmer);transform:translate(-50%,-1px);}
+  .boxplot-box{position:absolute;left:1px;right:1px;background:rgba(111,168,245,0.20);border:1.5px solid var(--gold);box-sizing:border-box;}
+  .boxplot-median{position:absolute;left:0;right:0;height:2px;background:var(--gold);}
+  .boxplot-col .avatar,.boxplot-col .avatar-fallback{width:26px;height:26px;font-size:10px;margin-top:10px;}
+  .boxplot-label{margin-top:5px;font-size:10px;text-align:center;color:var(--chalk-dim);max-width:60px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
   /* ---------- playoff bracket ---------- */
   .bracket{display:flex;gap:56px;overflow-x:auto;padding:10px 4px 16px;align-items:stretch;}
@@ -282,6 +323,7 @@
     .masthead{padding-top:22px;}
     .masthead-inner{padding-bottom:14px;gap:10px;}
     .league-name{font-size:26px;}
+    .league-logo{width:40px;height:40px;}
     .league-sub{font-size:11px;margin-top:6px;}
     .season-pill{font-size:10.5px;padding:5px 10px;}
     nav.tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;}
@@ -347,6 +389,14 @@
     .record-name{font-size:13px;}
     .record-ctx{font-size:10.5px;}
     .champs-row{font-size:12px;padding:9px 10px;}
+    .record-expand-hint{font-size:10px;padding-left:8px;}
+    .record-sub-list{padding-left:14px;}
+    .record-sub-ctx{max-width:110px;font-size:9.5px;}
+    .record-sub-name{font-size:11.5px;}
+    .award-season-year{font-size:16px;}
+    .award-card{min-width:130px;padding:12px;}
+    .award-name{font-size:12.5px;}
+    .award-player-row{font-size:10px;}
 
     /* analytics: scatter */
     .scatter-wrap{padding-bottom:100%;}
@@ -364,6 +414,14 @@
     .ridge-row{gap:8px;}
     .ridge-label{width:76px;font-size:10.5px;}
     .ridge-axis{margin-left:84px;font-size:10px;}
+
+    /* box plot */
+    .boxplot-wrap{padding:14px 10px 10px;}
+    .boxplot-col{flex:0 0 44px;}
+    .boxplot-chart{width:24px;}
+    .boxplot-row{gap:12px;padding-left:10px;}
+    .boxplot-label{font-size:9px;max-width:46px;}
+    .boxplot-tick{font-size:9px;}
 
     /* playoff bracket */
     .bracket-match{padding:8px 12px;}
@@ -391,15 +449,19 @@
 <header class="masthead">
   <div class="wrap">
     <div class="masthead-inner">
-      <div>
-        <h1 class="league-name" id="leagueName">League HQ</h1>
-        <div class="league-sub" id="leagueSub">Loading league…</div>
+      <div class="masthead-title">
+        <img id="leagueLogo" class="league-logo" alt="" style="display:none;">
+        <div>
+          <h1 class="league-name" id="leagueName">League HQ</h1>
+          <div class="league-sub" id="leagueSub">Loading league…</div>
+        </div>
       </div>
       <div class="season-pill" id="seasonPill">—</div>
     </div>
     <nav class="tabs wrap" id="tabs" style="display:none;">
       <a href="#standings" data-tab="standings">Standings</a>
       <a href="#records" data-tab="records">Hall of Records</a>
+      <a href="#victory" data-tab="victory">Victory Road</a>
       <a href="#analytics" data-tab="analytics">Analytics</a>
     </nav>
   </div>
@@ -422,7 +484,7 @@
 "use strict";
 
 /* ============================= CONFIG ============================= */
-var LEAGUE_ID = "1367213857868627968";
+var LEAGUE_ID = "1387553090483273728";
 var API = "https://api.sleeper.app/v1";
 var CDN = "https://sleepercdn.com";
 
@@ -537,6 +599,30 @@ function computePositionBreakdown(entry, rosterPositions){
   return out;
 }
 
+/* Sum points scored by each player while they were in that roster's starting
+   lineup, across every scored week of the season (regular + postseason).
+   Used to surface a champion's top contributors. */
+function computeTopStartedPlayers(season, rosterId, limit){
+  limit = limit || 3;
+  if (rosterId == null) return [];
+  var totals = {};
+  Object.keys(season.matchupsByWeek).forEach(function(wk){
+    var entry = season.matchupsByWeek[wk].find(function(e){ return e.roster_id === rosterId; });
+    if (!entry || !entry.starters) return;
+    entry.starters.forEach(function(pid, i){
+      if (!pid) return;
+      var pts = null;
+      if (entry.players_points && entry.players_points[pid] != null) pts = entry.players_points[pid];
+      else if (entry.starters_points && entry.starters_points[i] != null) pts = entry.starters_points[i];
+      if (pts == null) return;
+      totals[pid] = (totals[pid] || 0) + pts;
+    });
+  });
+  return Object.keys(totals).map(function(pid){ return {id:pid, pts:totals[pid]}; })
+    .sort(function(a,b){ return b.pts - a.pts; })
+    .slice(0, limit);
+}
+
 function gaussianKDE(values, xs, bw){
   return xs.map(function(x){
     var s = 0;
@@ -580,6 +666,7 @@ var STATE = {
   career: {},           // user_id -> aggregate stats
   h2h: {},              // user_id -> { opponentUserId -> {w,l,t,pf,pa} }
   seasonAllPlay: {},    // league_id -> user_id -> {w,l,t}
+  seasonAwards: [],     // one entry per season: {season, seasonObj, champUid, champRosterId, runnerUid, thirdUid, toiletUid}
   records: null,
   ready: false
 };
@@ -678,14 +765,27 @@ async function loadSeason(league, isLatest, nflState){
     }
   });
 
-  var bracketChampionRoster = null;
+  var bracketChampionRoster = null, bracketRunnerUpRoster = null, bracketThirdRoster = null;
   var bracket = await fetchJSON(API + "/league/" + league.league_id + "/winners_bracket");
   if (Array.isArray(bracket)){
     var finals = bracket.find(function(m){ return m.p === 1 && m.w != null; });
-    if (finals) bracketChampionRoster = finals.w;
+    if (finals){ bracketChampionRoster = finals.w; bracketRunnerUpRoster = finals.l; }
+    var thirdGame = bracket.find(function(m){ return m.p === 3 && m.w != null; });
+    if (thirdGame) bracketThirdRoster = thirdGame.w;
   }
 
-  return {league: league, rosters: rosters, users: users, rosterOwner: rosterOwner, matchupsByWeek: matchupsByWeek, bracketChampionRoster: bracketChampionRoster};
+  // Toilet bowl: only the finalist who escaped last place (the "2nd worst") is tracked,
+  // not the team that actually finished last.
+  var toiletBowlFinalistRoster = null;
+  var losersBracket = await fetchJSON(API + "/league/" + league.league_id + "/losers_bracket");
+  if (Array.isArray(losersBracket)){
+    var lastPlaceGame = losersBracket.find(function(m){ return m.p === 1 && m.w != null; });
+    if (lastPlaceGame) toiletBowlFinalistRoster = lastPlaceGame.w;
+  }
+
+  return {league: league, rosters: rosters, users: users, rosterOwner: rosterOwner, matchupsByWeek: matchupsByWeek,
+    bracketChampionRoster: bracketChampionRoster, bracketRunnerUpRoster: bracketRunnerUpRoster, bracketThirdRoster: bracketThirdRoster,
+    toiletBowlFinalistRoster: toiletBowlFinalistRoster};
 }
 
 function eligiblePositions(playerId){
@@ -740,6 +840,9 @@ function buildAggregates(){
       results:[], // chronological {season,week,pf,pa,res,opp}
       optimalPF:0, optimalGames:0, benchWasteTotal:0, benchWasteBest:null,
       championships:0, championSeasons:[],
+      runnerUps:0, runnerUpSeasons:[],
+      thirdPlaces:0, thirdPlaceSeasons:[],
+      toiletBowlFinalist:0, toiletBowlSeasons:[],
       allPlayWins:0, allPlayLosses:0, allPlayTies:0
     };
     return career[uid];
@@ -755,18 +858,29 @@ function buildAggregates(){
     bestSeason:null, benchWaste:null
   };
 
+  STATE.seasonAwards = [];
+
   STATE.seasons.forEach(function(season){
     var seasonSum = {}; // uid -> {pf,pa}
     var seasonAllPlay = {}; // uid -> {w,l,t}
     var rosterPositions = season.league.roster_positions;
 
-    if (season.bracketChampionRoster != null){
-      var champUid = season.rosterOwner[season.bracketChampionRoster];
-      if (champUid){
-        var cc = ensureCareer(champUid);
-        cc.championships++;
-        cc.championSeasons.push(season.league.season);
-      }
+    var champUid = season.bracketChampionRoster != null ? season.rosterOwner[season.bracketChampionRoster] : null;
+    var runnerUid = season.bracketRunnerUpRoster != null ? season.rosterOwner[season.bracketRunnerUpRoster] : null;
+    var thirdUid = season.bracketThirdRoster != null ? season.rosterOwner[season.bracketThirdRoster] : null;
+    var toiletUid = season.toiletBowlFinalistRoster != null ? season.rosterOwner[season.toiletBowlFinalistRoster] : null;
+
+    if (champUid){ var cc = ensureCareer(champUid); cc.championships++; cc.championSeasons.push(season.league.season); }
+    if (runnerUid){ var rc = ensureCareer(runnerUid); rc.runnerUps++; rc.runnerUpSeasons.push(season.league.season); }
+    if (thirdUid){ var tc = ensureCareer(thirdUid); tc.thirdPlaces++; tc.thirdPlaceSeasons.push(season.league.season); }
+    if (toiletUid){ var xc = ensureCareer(toiletUid); xc.toiletBowlFinalist++; xc.toiletBowlSeasons.push(season.league.season); }
+
+    if (champUid || runnerUid || thirdUid || toiletUid){
+      STATE.seasonAwards.push({
+        season: season.league.season, seasonObj: season,
+        champUid: champUid, champRosterId: season.bracketChampionRoster,
+        runnerUid: runnerUid, thirdUid: thirdUid, toiletUid: toiletUid
+      });
     }
 
     Object.keys(season.matchupsByWeek).forEach(function(wk){
@@ -938,7 +1052,7 @@ function userLine(uid, opts){
 
 function setTabsVisible(v){ $("#tabs").style.display = v ? "flex" : "none"; }
 function updateNavActive(hash){
-  var tab = hash.indexOf("#records")===0 ? "records" : (hash.indexOf("#analytics")===0 ? "analytics" : "standings");
+  var tab = hash.indexOf("#records")===0 ? "records" : (hash.indexOf("#victory")===0 ? "victory" : (hash.indexOf("#analytics")===0 ? "analytics" : "standings"));
   document.querySelectorAll("nav.tabs a").forEach(function(a){
     a.classList.toggle("active", a.getAttribute("data-tab")===tab);
   });
@@ -1006,6 +1120,7 @@ function sortRowsByRecord(rows){
 var STANDINGS_SORT_VALUE = {
   team: function(r){ return teamName(r.u).toLowerCase(); },
   wins: function(r){ return r.wins + r.ties*0.5; },
+  winpct: function(r){ var gp=r.wins+r.losses+r.ties; return gp ? (r.wins+r.ties*0.5)/gp : -1; },
   allplay: function(r){ return r.ap ? (r.ap.w + r.ap.t*0.5) : -1; },
   pf: function(r){ return r.pf; },
   pa: function(r){ return r.pa; },
@@ -1014,6 +1129,7 @@ var STANDINGS_SORT_VALUE = {
 var STANDINGS_COLS = [
   {key:"team", label:"Team"},
   {key:"wins", label:"W-L-T"},
+  {key:"winpct", label:"Win%"},
   {key:"allplay", label:"All-Play", title:"Record if this team had played every other team, every week"},
   {key:"pf", label:"PF"},
   {key:"pa", label:"PA"},
@@ -1100,10 +1216,10 @@ function renderStandings(){
   var showLines = standingsMode === "season" && baseRows.length > 5 && isDefaultSort;
   rows.forEach(function(r, i){
     if (showLines && r.defaultRank === 6){
-      tbody.appendChild(el("tr", {class:"standings-divider"}, [el("td", {colspan:"7"}, ["Playoff line"])]));
+      tbody.appendChild(el("tr", {class:"standings-divider"}, [el("td", {colspan:"8"}, ["Playoff line"])]));
     }
     if (showLines && baseRows.length > 10 && r.defaultRank === baseRows.length - 4){
-      tbody.appendChild(el("tr", {class:"standings-divider"}, [el("td", {colspan:"7"}, ["Bottom 5"])]));
+      tbody.appendChild(el("tr", {class:"standings-divider"}, [el("td", {colspan:"8"}, ["Bottom 5"])]));
     }
     var isStar = r.uid === starUid;
     var tr = el("tr", {"data-rank": r.defaultRank, class: isStar ? "wildcard-row" : "", onclick:function(){ if (r.uid) location.hash = "#team/" + r.uid; }});
@@ -1119,6 +1235,7 @@ function renderStandings(){
     var teamCell = el("div", {class:"team-cell"}, [avatarEl(r.u, "sm"), nameWrap]);
     tr.appendChild(el("td", {}, [teamCell]));
     tr.appendChild(el("td", {class:"num"}, [r.wins + "-" + r.losses + (r.ties ? "-"+r.ties : "")]));
+    tr.appendChild(el("td", {class:"num dim"}, [(function(){ var gp=r.wins+r.losses+r.ties; return gp ? fmt1((r.wins+r.ties*0.5)/gp*100) + "%" : "—"; })()]));
     tr.appendChild(el("td", {class:"num dim"}, [r.ap ? (r.ap.w + "-" + r.ap.l + (r.ap.t ? "-"+r.ap.t : "")) : "—"]));
     tr.appendChild(el("td", {class:"num"}, [fmt1(r.pf)]));
     tr.appendChild(el("td", {class:"num dim"}, [fmt1(r.pa)]));
@@ -1241,7 +1358,10 @@ function renderTeamDetail(uid){
       c ? el("div", {class:"stat-strip"}, [
         el("div", {class:"stat"}, [el("b",{},[c.wins+"-"+c.losses+(c.ties?"-"+c.ties:"")]), "career record"]),
         el("div", {class:"stat"}, [el("b",{},[fmt1(c.pf)]), "career points for"]),
-        c.championships ? el("div", {class:"stat"}, [el("b",{},["🏆 "+c.championships]), "championship"+(c.championships>1?"s":"")]) : null
+        c.championships ? el("div", {class:"stat"}, [el("b",{},["🏆 "+c.championships]), "championship"+(c.championships>1?"s":"")]) : null,
+        c.runnerUps ? el("div", {class:"stat"}, [el("b",{},["🥈 "+c.runnerUps]), "runner-up"+(c.runnerUps>1?"s":"")]) : null,
+        c.thirdPlaces ? el("div", {class:"stat"}, [el("b",{},["🥉 "+c.thirdPlaces]), "third place"+(c.thirdPlaces>1?"s":"")]) : null,
+        c.toiletBowlFinalist ? el("div", {class:"stat"}, [el("b",{},["🚽 "+c.toiletBowlFinalist]), "toilet bowl loser"+(c.toiletBowlFinalist>1?"s":"")]) : null
       ]) : null,
       (c && c.currentStreak && c.currentStreak.len > 1) ? el("div", {class:"streak-badge " + (c.currentStreak.type==="W"?"win":"loss")}, [
         c.currentStreak.len + "-game " + (c.currentStreak.type==="W" ? "win streak" : "losing streak")
@@ -1378,6 +1498,7 @@ function computeSegmentRecords(segment){
     var isPost = start != null && week >= start;
     return segment === "post" ? isPost : !isPost;
   }
+  function topN(arr, cmp, n){ return arr.slice().sort(cmp).slice(0, n||5); }
 
   var R = {};
   var seasonSum = {};
@@ -1386,38 +1507,53 @@ function computeSegmentRecords(segment){
     byUser[uid] = STATE.career[uid].results.filter(function(r){ return inSegment(r.season, r.week); });
   });
 
+  var highGameArr=[], lowGameArr=[], highCombinedArr=[], blowoutArr=[], nailbiterArr=[], benchWasteArr=[];
+  var combinedSeen = {};
+
   Object.keys(byUser).forEach(function(uid){
     byUser[uid].forEach(function(r){
-      if (!R.highGame || r.pf > R.highGame.value) R.highGame = {value:r.pf, uid:uid, opp:r.opp, season:r.season, week:r.week};
-      if (r.pf > 0 && (!R.lowGame || r.pf < R.lowGame.value)) R.lowGame = {value:r.pf, uid:uid, opp:r.opp, season:r.season, week:r.week};
+      highGameArr.push({value:r.pf, uid:uid, opp:r.opp, season:r.season, week:r.week});
+      if (r.pf > 0) lowGameArr.push({value:r.pf, uid:uid, opp:r.opp, season:r.season, week:r.week});
       var combined = r.pf + r.pa;
-      if (combined > 0 && (!R.highCombined || combined > R.highCombined.value)) R.highCombined = {value:combined, uidA:uid, uidB:r.opp, season:r.season, week:r.week};
+      if (combined > 0){
+        var pairKey = r.season + "-" + r.week + "-" + [uid, r.opp].sort().join(",");
+        if (!combinedSeen[pairKey]){
+          combinedSeen[pairKey] = true;
+          highCombinedArr.push({value:combined, uidA:uid, uidB:r.opp, season:r.season, week:r.week});
+        }
+      }
       if (r.pf !== r.pa){
         var margin = r.pf - r.pa;
         if (margin > 0){
-          if (!R.blowout || margin > R.blowout.value) R.blowout = {value:margin, winner:uid, loser:r.opp, season:r.season, week:r.week, winPts:r.pf, losePts:r.pa};
-          if (!R.nailbiter || margin < R.nailbiter.value) R.nailbiter = {value:margin, winner:uid, loser:r.opp, season:r.season, week:r.week, winPts:r.pf, losePts:r.pa};
+          blowoutArr.push({value:margin, winner:uid, loser:r.opp, season:r.season, week:r.week, winPts:r.pf, losePts:r.pa});
+          nailbiterArr.push({value:margin, winner:uid, loser:r.opp, season:r.season, week:r.week, winPts:r.pf, losePts:r.pa});
         }
       }
       seasonSum[uid] = seasonSum[uid] || {};
       seasonSum[uid][r.season] = (seasonSum[uid][r.season]||0) + r.pf;
       if (r.opt != null){
         var waste = r.opt - r.pf;
-        if (waste > 0.01 && (!R.benchWaste || waste > R.benchWaste.value)){
-          R.benchWaste = {value:waste, uid:uid, season:r.season, week:r.week, pf:r.pf, opt:r.opt};
-        }
+        if (waste > 0.01) benchWasteArr.push({value:waste, uid:uid, season:r.season, week:r.week, pf:r.pf, opt:r.opt});
       }
     });
   });
 
+  R.highGame = topN(highGameArr, function(a,b){ return b.value-a.value; });
+  R.lowGame = topN(lowGameArr, function(a,b){ return a.value-b.value; });
+  R.highCombined = topN(highCombinedArr, function(a,b){ return b.value-a.value; });
+  R.blowout = topN(blowoutArr, function(a,b){ return b.value-a.value; });
+  R.nailbiter = topN(nailbiterArr, function(a,b){ return a.value-b.value; });
+  R.benchWaste = topN(benchWasteArr, function(a,b){ return b.value-a.value; });
+
+  var bestSeasonArr = [];
   Object.keys(seasonSum).forEach(function(uid){
     Object.keys(seasonSum[uid]).forEach(function(season){
-      var v = seasonSum[uid][season];
-      if (!R.bestSeason || v > R.bestSeason.value) R.bestSeason = {value:v, uid:uid, season:season};
+      bestSeasonArr.push({value:seasonSum[uid][season], uid:uid, season:season});
     });
   });
+  R.bestSeason = topN(bestSeasonArr, function(a,b){ return b.value-a.value; });
 
-  var mostWins=null, mostLosses=null, winStreak=null, lossStreak=null, mostEfficient=null;
+  var mostWinsArr=[], mostLossesArr=[], winStreakArr=[], lossStreakArr=[], mostEfficientArr=[];
   Object.keys(byUser).forEach(function(uid){
     var filtered = byUser[uid];
     var wins=0, losses=0, sumPf=0, sumOpt=0, optGames=0;
@@ -1430,17 +1566,18 @@ function computeSegmentRecords(segment){
       if (curType==="W" && cur>bestW){ bestW=cur; bestWctx={len:cur,endSeason:r.season,endWeek:r.week}; }
       if (curType==="L" && cur>bestL){ bestL=cur; bestLctx={len:cur,endSeason:r.season,endWeek:r.week}; }
     });
-    if (wins && (!mostWins || wins>mostWins.value)) mostWins = {value:wins, uid:uid};
-    if (losses && (!mostLosses || losses>mostLosses.value)) mostLosses = {value:losses, uid:uid};
-    if (bestW && (!winStreak || bestW>winStreak.value)) winStreak = {value:bestW, uid:uid, ctx:bestWctx};
-    if (bestL && (!lossStreak || bestL>lossStreak.value)) lossStreak = {value:bestL, uid:uid, ctx:bestLctx};
+    if (wins) mostWinsArr.push({value:wins, uid:uid});
+    if (losses) mostLossesArr.push({value:losses, uid:uid});
+    if (bestW) winStreakArr.push({value:bestW, uid:uid, ctx:bestWctx});
+    if (bestL) lossStreakArr.push({value:bestL, uid:uid, ctx:bestLctx});
     var minGamesForEff = segment==="post" ? 3 : 10;
-    if (optGames >= minGamesForEff && sumOpt > 0){
-      var eff = sumPf/sumOpt;
-      if (!mostEfficient || eff>mostEfficient.value) mostEfficient = {value:eff, uid:uid};
-    }
+    if (optGames >= minGamesForEff && sumOpt > 0) mostEfficientArr.push({value:sumPf/sumOpt, uid:uid});
   });
-  R.mostWins=mostWins; R.mostLosses=mostLosses; R.winStreak=winStreak; R.lossStreak=lossStreak; R.mostEfficient=mostEfficient;
+  R.mostWins = topN(mostWinsArr, function(a,b){ return b.value-a.value; });
+  R.mostLosses = topN(mostLossesArr, function(a,b){ return b.value-a.value; });
+  R.winStreak = topN(winStreakArr, function(a,b){ return b.value-a.value; });
+  R.lossStreak = topN(lossStreakArr, function(a,b){ return b.value-a.value; });
+  R.mostEfficient = topN(mostEfficientArr, function(a,b){ return b.value-a.value; });
 
   // luck: re-run the all-play comparison, but only across weeks in this segment
   var apWins={}, apLosses={}, apTies={};
@@ -1463,7 +1600,7 @@ function computeSegmentRecords(segment){
       });
     });
   });
-  var luckiest=null, unluckiest=null;
+  var luckArr = [];
   Object.keys(byUser).forEach(function(uid){
     var filtered = byUser[uid];
     var wins=0, losses=0, ties=0;
@@ -1476,23 +1613,137 @@ function computeSegmentRecords(segment){
     if (gp>=minGp && apTotal>=minAp){
       var actualPct = (wins+0.5*ties)/gp;
       var apPct = (apW+0.5*apT)/apTotal;
-      var delta = actualPct-apPct;
-      if (!luckiest || delta>luckiest.value) luckiest = {value:delta, uid:uid, actualPct:actualPct, apPct:apPct};
-      if (!unluckiest || delta<unluckiest.value) unluckiest = {value:delta, uid:uid, actualPct:actualPct, apPct:apPct};
+      luckArr.push({value:actualPct-apPct, uid:uid, actualPct:actualPct, apPct:apPct});
     }
   });
-  R.luckiest = luckiest; R.unluckiest = unluckiest;
-
-  if (segment === "post"){
-    R.champions = Object.keys(STATE.career).map(function(uid){ return {uid:uid, c:STATE.career[uid]}; })
-      .filter(function(x){ return x.c.championships > 0; })
-      .sort(function(a,b){ return b.c.championships - a.c.championships; });
-  }
+  R.luckiest = topN(luckArr, function(a,b){ return b.value-a.value; });
+  R.unluckiest = topN(luckArr, function(a,b){ return a.value-b.value; });
 
   return R;
 }
 
 var recordsSegment = "regular";
+var expandedRecords = {};
+
+var RECORD_FORMATTERS = {
+  highGame: function(e){ return {uids:[e.uid], value:fmt1(e.value), name:teamName(STATE.users[e.uid]), ctx:"Week "+e.week+", "+e.season+" vs "+teamName(STATE.users[e.opp])}; },
+  lowGame: function(e){ return {uids:[e.uid], value:fmt1(e.value), name:teamName(STATE.users[e.uid]), ctx:"Week "+e.week+", "+e.season+" vs "+teamName(STATE.users[e.opp])}; },
+  highCombined: function(e){ return {uids:[e.uidA,e.uidB], value:fmt1(e.value), name:teamName(STATE.users[e.uidA])+" vs "+teamName(STATE.users[e.uidB]), ctx:"Week "+e.week+", "+e.season}; },
+  blowout: function(e){ return {uids:[e.winner], value:"+"+fmt1(e.value), name:teamName(STATE.users[e.winner]), ctx:fmt1(e.winPts)+"–"+fmt1(e.losePts)+" over "+teamName(STATE.users[e.loser])+" · Wk "+e.week+", "+e.season}; },
+  nailbiter: function(e){ return {uids:[e.winner], value:fmt1(e.value)+" pts", name:teamName(STATE.users[e.winner])+" won", ctx:fmt1(e.winPts)+"–"+fmt1(e.losePts)+" over "+teamName(STATE.users[e.loser])+" · Wk "+e.week+", "+e.season}; },
+  benchWaste: function(e){ return {uids:[e.uid], value:"-"+fmt1(e.value)+" pts", name:teamName(STATE.users[e.uid]), ctx:"Scored "+fmt1(e.pf)+" but could've scored "+fmt1(e.opt)+" · Wk "+e.week+", "+e.season}; },
+  bestSeason: function(e){ return {uids:[e.uid], value:fmt1(e.value), name:teamName(STATE.users[e.uid]), ctx:e.season+" season total"}; },
+  mostWins: function(e,seg){ return {uids:[e.uid], value:String(e.value), name:teamName(STATE.users[e.uid]), ctx: seg==="post" ? "across all playoff appearances tracked" : "across all seasons tracked"}; },
+  mostLosses: function(e,seg){ return {uids:[e.uid], value:String(e.value), name:teamName(STATE.users[e.uid]), ctx: seg==="post" ? "across all playoff appearances tracked" : "across all seasons tracked"}; },
+  winStreak: function(e){ return {uids:[e.uid], value:e.value+" games", name:teamName(STATE.users[e.uid]), ctx:"through Week "+e.ctx.endWeek+", "+e.ctx.endSeason}; },
+  lossStreak: function(e){ return {uids:[e.uid], value:e.value+" games", name:teamName(STATE.users[e.uid]), ctx:"through Week "+e.ctx.endWeek+", "+e.ctx.endSeason}; },
+  mostEfficient: function(e){ return {uids:[e.uid], value:fmt0(e.value*100)+"%", name:teamName(STATE.users[e.uid]), ctx:"of optimal possible lineup points started"}; },
+  luckiest: function(e){ return {uids:[e.uid], value:"+"+fmt0(e.value*100)+" pts", name:teamName(STATE.users[e.uid]), ctx:"actual win% ("+fmt0(e.actualPct*100)+"%) vs. all-play win% ("+fmt0(e.apPct*100)+"%)"}; },
+  unluckiest: function(e){ return {uids:[e.uid], value:fmt0(e.value*100)+" pts", name:teamName(STATE.users[e.uid]), ctx:"actual win% ("+fmt0(e.actualPct*100)+"%) vs. all-play win% ("+fmt0(e.apPct*100)+"%)"}; }
+};
+
+var RECORD_GROUPS = [
+  {title:"Single-Game Records", keys:[
+    {key:"highGame", label:"Most Points — Single Game"},
+    {key:"lowGame", label:"Fewest Points — Single Game"},
+    {key:"highCombined", label:"Highest Combined Score"},
+    {key:"blowout", label:"Biggest Blowout"},
+    {key:"nailbiter", label:"Closest Margin"},
+    {key:"benchWaste", label:"Biggest Bench Blunder"}
+  ]},
+  {title:"Season & Manager Records", keys:[
+    {key:"bestSeason", label:"Best Single Season (PF)"},
+    {key:"mostWins", label:function(seg){ return "Most " + (seg==="post"?"Postseason":"Career") + " Wins"; }},
+    {key:"mostLosses", label:function(seg){ return "Most " + (seg==="post"?"Postseason":"Career") + " Losses"; }},
+    {key:"winStreak", label:"Longest Win Streak"},
+    {key:"lossStreak", label:"Longest Losing Streak"},
+    {key:"mostEfficient", label:"Most Efficient Manager"},
+    {key:"luckiest", label:"Luckiest Manager"},
+    {key:"unluckiest", label:"Unluckiest Manager"}
+  ]}
+];
+
+function buildRecordRow(def, arr, segment){
+  var formatter = RECORD_FORMATTERS[def.key];
+  var top = formatter(arr[0], segment);
+  var label = typeof def.label === "function" ? def.label(segment) : def.label;
+  var expanded = !!expandedRecords[def.key];
+  var canExpand = arr.length > 1;
+
+  var avatars = el("div", {class:"record-avatars"}, top.uids.map(function(uid){ return avatarEl(STATE.users[uid], "md"); }));
+  var row = el("div", {class:"record-row" + (canExpand ? " record-row-clickable" : "")}, [
+    avatars,
+    el("div", {class:"record-body"}, [
+      el("div", {class:"record-label"}, [label]),
+      el("div", {class:"record-value"}, [top.value]),
+      el("div", {class:"record-name"}, [top.name]),
+      top.ctx ? el("div", {class:"record-ctx"}, [top.ctx]) : null
+    ]),
+    canExpand ? el("div", {class:"record-expand-hint"}, [expanded ? "▲ Hide" : "▼ Top " + arr.length]) : null
+  ]);
+  if (canExpand){
+    row.addEventListener("click", function(){ expandedRecords[def.key] = !expandedRecords[def.key]; renderRecords(); });
+  }
+
+  var wrapper = el("div", {});
+  wrapper.appendChild(row);
+  if (expanded){
+    var sub = el("div", {class:"record-sub-list"});
+    arr.slice(1).forEach(function(entry, i){
+      var f = formatter(entry, segment);
+      sub.appendChild(el("div", {class:"record-sub-row", onclick:function(ev){ ev.stopPropagation(); if (f.uids[0]) location.hash = "#team/" + f.uids[0]; }}, [
+        el("span", {class:"record-sub-rank"}, [String(i+2)]),
+        avatarEl(STATE.users[f.uids[0]], "sm"),
+        el("span", {class:"record-sub-name"}, [f.name]),
+        el("span", {class:"record-sub-value"}, [f.value]),
+        el("span", {class:"record-sub-ctx"}, [f.ctx || ""])
+      ]));
+    });
+    wrapper.appendChild(sub);
+  }
+  return wrapper;
+}
+
+function buildAwardCard(emoji, label, uid, topPlayers){
+  var u = STATE.users[uid];
+  var card = el("div", {class:"award-card", onclick:function(){ if (uid) location.hash = "#team/" + uid; }}, [
+    el("div", {class:"award-emoji"}, [emoji]),
+    avatarEl(u, "sm"),
+    el("div", {class:"award-name"}, [teamName(u)]),
+    el("div", {class:"award-label"}, [label])
+  ]);
+  if (topPlayers && topPlayers.length){
+    var plist = el("div", {class:"award-players"});
+    topPlayers.forEach(function(p){
+      var info = STATE.playersInfo[p.id];
+      var isDef = /^[A-Z]{2,4}$/.test(p.id) && !info;
+      var name = isDef ? p.id : (info ? info.n : p.id);
+      plist.appendChild(el("div", {class:"award-player-row"}, [name + " — " + fmt1(p.pts) + " pts"]));
+    });
+    card.appendChild(plist);
+  }
+  return card;
+}
+
+function buildSeasonAwardsSection(standalone){
+  if (!STATE.seasonAwards.length) return null;
+  var wrap = el("div", {});
+  if (!standalone) wrap.appendChild(el("div", {class:"section-title"}, ["League Awards"]));
+  var sorted = STATE.seasonAwards.slice().sort(function(a,b){ return parseInt(b.season,10) - parseInt(a.season,10); });
+  sorted.forEach(function(entry){
+    var seasonRow = el("div", {class:"award-season"});
+    seasonRow.appendChild(el("div", {class:"award-season-year"}, [entry.season]));
+    var podium = el("div", {class:"award-podium"});
+    if (entry.champUid) podium.appendChild(buildAwardCard("🏆", "Champion", entry.champUid, computeTopStartedPlayers(entry.seasonObj, entry.champRosterId, 3)));
+    if (entry.runnerUid) podium.appendChild(buildAwardCard("🥈", "Runner-Up", entry.runnerUid));
+    if (entry.thirdUid) podium.appendChild(buildAwardCard("🥉", "Third Place", entry.thirdUid));
+    if (entry.toiletUid) podium.appendChild(buildAwardCard("🚽", "Toilet Bowl Loser", entry.toiletUid));
+    seasonRow.appendChild(podium);
+    wrap.appendChild(seasonRow);
+  });
+  wrap.appendChild(el("div", {class:"foot-note"}, ["The champion's card shows their three highest-scoring started players that season. Toilet Bowl Loser is the team that reached the last-place game but avoided finishing dead last — this league's 2nd-worst team, not its worst."]));
+  return wrap;
+}
 
 function renderRecords(){
   var app = $("#app");
@@ -1508,66 +1759,80 @@ function renderRecords(){
   app.appendChild(head);
 
   var R = computeSegmentRecords(recordsSegment);
-  var list = el("div", {class:"records-list"});
   var any = false;
 
-  if (R.highGame){ any=true; list.appendChild(recordRow("Most Points — Single Game", R.highGame.uid, fmt1(R.highGame.value), teamName(STATE.users[R.highGame.uid]), "Week " + R.highGame.week + ", " + R.highGame.season + " vs " + teamName(STATE.users[R.highGame.opp]))); }
-  if (R.lowGame){ any=true; list.appendChild(recordRow("Fewest Points — Single Game", R.lowGame.uid, fmt1(R.lowGame.value), teamName(STATE.users[R.lowGame.uid]), "Week " + R.lowGame.week + ", " + R.lowGame.season + " vs " + teamName(STATE.users[R.lowGame.opp]))); }
-  if (R.highCombined){ any=true; list.appendChild(recordRow("Highest Combined Score", [R.highCombined.uidA, R.highCombined.uidB], fmt1(R.highCombined.value), teamName(STATE.users[R.highCombined.uidA]) + " vs " + teamName(STATE.users[R.highCombined.uidB]), "Week " + R.highCombined.week + ", " + R.highCombined.season)); }
-  if (R.blowout){ any=true; list.appendChild(recordRow("Biggest Blowout", R.blowout.winner, "+" + fmt1(R.blowout.value), teamName(STATE.users[R.blowout.winner]), fmt1(R.blowout.winPts) + "–" + fmt1(R.blowout.losePts) + " over " + teamName(STATE.users[R.blowout.loser]) + " · Wk " + R.blowout.week + ", " + R.blowout.season)); }
-  if (R.nailbiter){ any=true; list.appendChild(recordRow("Closest Margin", R.nailbiter.winner, fmt1(R.nailbiter.value) + " pts", teamName(STATE.users[R.nailbiter.winner]) + " won", fmt1(R.nailbiter.winPts) + "–" + fmt1(R.nailbiter.losePts) + " over " + teamName(STATE.users[R.nailbiter.loser]) + " · Wk " + R.nailbiter.week + ", " + R.nailbiter.season)); }
-  if (R.bestSeason){ any=true; list.appendChild(recordRow("Best Single Season (PF)", R.bestSeason.uid, fmt1(R.bestSeason.value), teamName(STATE.users[R.bestSeason.uid]), R.bestSeason.season + " season total")); }
-  if (R.mostWins){ any=true; list.appendChild(recordRow("Most " + (recordsSegment==="post"?"Postseason":"Career") + " Wins", R.mostWins.uid, String(R.mostWins.value), teamName(STATE.users[R.mostWins.uid]), recordsSegment==="post" ? "across all playoff appearances tracked" : "across all seasons tracked")); }
-  if (R.mostLosses){ any=true; list.appendChild(recordRow("Most " + (recordsSegment==="post"?"Postseason":"Career") + " Losses", R.mostLosses.uid, String(R.mostLosses.value), teamName(STATE.users[R.mostLosses.uid]), recordsSegment==="post" ? "across all playoff appearances tracked" : "across all seasons tracked")); }
-  if (R.winStreak){ any=true; list.appendChild(recordRow("Longest Win Streak", R.winStreak.uid, R.winStreak.value + " games", teamName(STATE.users[R.winStreak.uid]), "through Week " + R.winStreak.ctx.endWeek + ", " + R.winStreak.ctx.endSeason)); }
-  if (R.lossStreak){ any=true; list.appendChild(recordRow("Longest Losing Streak", R.lossStreak.uid, R.lossStreak.value + " games", teamName(STATE.users[R.lossStreak.uid]), "through Week " + R.lossStreak.ctx.endWeek + ", " + R.lossStreak.ctx.endSeason)); }
-  if (R.benchWaste){ any=true; list.appendChild(recordRow("Biggest Bench Blunder", R.benchWaste.uid, "-" + fmt1(R.benchWaste.value) + " pts", teamName(STATE.users[R.benchWaste.uid]), "Scored " + fmt1(R.benchWaste.pf) + " but could've scored " + fmt1(R.benchWaste.opt) + " · Wk " + R.benchWaste.week + ", " + R.benchWaste.season)); }
-  if (R.mostEfficient){ any=true; list.appendChild(recordRow("Most Efficient Manager", R.mostEfficient.uid, fmt0(R.mostEfficient.value*100) + "%", teamName(STATE.users[R.mostEfficient.uid]), "of optimal possible lineup points started")); }
-  if (R.luckiest){ any=true; list.appendChild(recordRow("Luckiest Manager", R.luckiest.uid, "+" + fmt0(R.luckiest.value*100) + " pts", teamName(STATE.users[R.luckiest.uid]), "actual win% (" + fmt0(R.luckiest.actualPct*100) + "%) vs. all-play win% (" + fmt0(R.luckiest.apPct*100) + "%)")); }
-  if (R.unluckiest){ any=true; list.appendChild(recordRow("Unluckiest Manager", R.unluckiest.uid, fmt0(R.unluckiest.value*100) + " pts", teamName(STATE.users[R.unluckiest.uid]), "actual win% (" + fmt0(R.unluckiest.actualPct*100) + "%) vs. all-play win% (" + fmt0(R.unluckiest.apPct*100) + "%)")); }
+  RECORD_GROUPS.forEach(function(group){
+    var groupList = el("div", {class:"records-list"});
+    var groupAny = false;
+    group.keys.forEach(function(def){
+      var arr = R[def.key];
+      if (!arr || !arr.length) return;
+      groupAny = true; any = true;
+      groupList.appendChild(buildRecordRow(def, arr, recordsSegment));
+    });
+    if (groupAny){
+      app.appendChild(el("div", {class:"section-title", style: group===RECORD_GROUPS[0] ? "margin-top:0;" : ""}, [group.title]));
+      app.appendChild(groupList);
+    }
+  });
 
   if (!any){
     app.appendChild(el("div", {class:"foot-note"}, [recordsSegment==="post" ? "No postseason games found yet for this league." : "No regular-season games found yet."]));
-  } else {
-    app.appendChild(list);
-  }
-
-  if (recordsSegment === "post" && R.champions && R.champions.length){
-    app.appendChild(el("div", {class:"section-title"}, ["League Champions"]));
-    var champsList = el("div", {class:"champs-list"});
-    R.champions.forEach(function(x){
-      var u = STATE.users[x.uid];
-      champsList.appendChild(el("div", {class:"champs-row"}, [
-        avatarEl(u, "sm"),
-        el("span", {}, [teamName(u) + " — " + x.c.championSeasons.join(", ")]),
-        el("b", {}, ["🏆 × " + x.c.championships])
-      ]));
-    });
-    app.appendChild(champsList);
   }
 
   app.appendChild(el("div", {class:"foot-note"}, [
     recordsSegment === "post"
-      ? "Postseason weeks are determined by each season's playoff start week on Sleeper. \"Optimal\" figures estimate the best possible lineup from that roster's actual scoring."
-      : "Regular-season weeks only — postseason games are broken out under the Postseason tab. \"Optimal\" figures estimate the best possible lineup from that roster's actual scoring."
+      ? "Postseason weeks are determined by each season's playoff start week on Sleeper. \"Optimal\" figures estimate the best possible lineup from that roster's actual scoring. Click a record with a top-5 badge to see who else made the list."
+      : "Regular-season weeks only — postseason games are broken out under the Postseason tab. \"Optimal\" figures estimate the best possible lineup from that roster's actual scoring. Click a record with a top-5 badge to see who else made the list."
   ]));
+}
+
+function renderVictoryRoad(){
+  var app = $("#app");
+  app.innerHTML = "";
+  app.appendChild(el("h2", {style:"font-size:20px;margin-bottom:4px;"}, ["Victory Road"]));
+  app.appendChild(el("div", {class:"analytics-intro"}, ["Every season's champion, runner-up, third place, and toilet bowl loser, pulled from this league's playoff and loser's brackets on Sleeper."]));
+  var awards = buildSeasonAwardsSection(true);
+  if (awards) app.appendChild(awards);
+  else app.appendChild(el("div", {class:"foot-note"}, ["No completed playoff brackets found yet for this league."]));
 }
 
 /* ============================= RENDER: ANALYTICS ============================= */
 var analyticsWeek = null;
 var analyticsPosition = "RB";
 var scatterMode = "actual";
+var analyticsSeasonIdx = null;
 
 function seasonWeeksWithData(season){
   return Object.keys(season.matchupsByWeek).map(Number).sort(function(a,b){ return a-b; });
 }
 
+function buildAnalyticsSeasonSelect(){
+  var sel = el("select", {class:"ctrl", onchange:function(e){
+    analyticsSeasonIdx = parseInt(e.target.value,10);
+    analyticsWeek = null;
+    renderAnalytics();
+  }});
+  STATE.seasons.forEach(function(s, idx){
+    var opt = el("option", {value:idx}, [s.league.season]);
+    if (idx === analyticsSeasonIdx) opt.selected = true;
+    sel.appendChild(opt);
+  });
+  return sel;
+}
+
 function renderAnalytics(){
   var app = $("#app");
   app.innerHTML = "";
-  app.appendChild(el("h2", {style:"font-size:20px;margin-bottom:18px;"}, ["Analytics"]));
 
-  var season = STATE.currentSeason;
+  if (analyticsSeasonIdx == null) analyticsSeasonIdx = STATE.seasons.length - 1;
+  var topHead = el("div", {class:"panel-head"}, [
+    el("h2", {style:"font-size:20px;margin:0;"}, ["Analytics"]),
+    STATE.seasons.length > 1 ? buildAnalyticsSeasonSelect() : null
+  ]);
+  app.appendChild(topHead);
+
+  var season = STATE.seasons[analyticsSeasonIdx];
   var weeks = seasonWeeksWithData(season);
   if (!analyticsWeek || weeks.indexOf(analyticsWeek) === -1) analyticsWeek = weeks[weeks.length-1];
 
@@ -1628,6 +1893,82 @@ function renderAnalytics(){
   distSection.appendChild(el("div", {class:"analytics-intro"}, ["How each team's weekly " + analyticsPosition + " scoring has been distributed this season, sorted from lowest to highest average."]));
   distSection.appendChild(buildRidgePlot(season, analyticsPosition));
   app.appendChild(distSection);
+
+  // ---- Weekly scoring box plot ----
+  var boxSection = el("div", {class:"analytics-section"});
+  boxSection.appendChild(el("div", {class:"section-title"}, ["Weekly Scoring Spread"]));
+  boxSection.appendChild(el("div", {class:"analytics-intro"}, ["Each team's weekly point totals this season as a box plot: the box spans the middle 50% of their weeks (25th–75th percentile), the line inside is their median week, and the whiskers reach their lowest and highest score."]));
+  boxSection.appendChild(buildBoxWhiskerPlot(season));
+  app.appendChild(boxSection);
+}
+
+function quantile(sortedArr, q){
+  var pos = (sortedArr.length - 1) * q;
+  var base = Math.floor(pos);
+  var rest = pos - base;
+  if (sortedArr[base+1] !== undefined) return sortedArr[base] + rest * (sortedArr[base+1] - sortedArr[base]);
+  return sortedArr[base];
+}
+
+function buildBoxWhiskerPlot(season){
+  var data = [];
+  season.rosters.forEach(function(r){
+    var uid = r.roster_id != null ? season.rosterOwner[r.roster_id] : null;
+    var c = STATE.career[uid];
+    if (!c) return;
+    var vals = c.results.filter(function(x){ return x.season === season.league.season; }).map(function(x){ return x.pf; });
+    if (!vals.length) return;
+    vals.sort(function(a,b){ return a-b; });
+    data.push({
+      uid:uid, u:STATE.users[uid], vals:vals,
+      min:vals[0], max:vals[vals.length-1],
+      q1:quantile(vals,0.25), median:quantile(vals,0.5), q3:quantile(vals,0.75)
+    });
+  });
+  if (!data.length) return el("div", {class:"foot-note"}, ["No scored games yet this season."]);
+
+  var globalMin = Math.min.apply(null, data.map(function(d){ return d.min; }));
+  var globalMax = Math.max.apply(null, data.map(function(d){ return d.max; }));
+  var pad = (globalMax-globalMin) * 0.12 || 5;
+  globalMin = Math.max(0, globalMin - pad);
+  globalMax += pad;
+
+  // Scale by a fixed pixels-per-point ratio (clamped to a sane range) so the
+  // chart grows taller as the season's scoring spread grows, rather than
+  // always stretching whatever range into one fixed-height box.
+  var CH = Math.round(Math.max(160, Math.min(480, (globalMax-globalMin) * 2.1)));
+  function toTop(v){ return (1 - (v-globalMin)/(globalMax-globalMin)) * CH; }
+
+  data.sort(function(a,b){ return b.median - a.median; });
+
+  var axis = el("div", {class:"boxplot-axis", style:"height:"+CH+"px;"});
+  for (var i=0;i<=4;i++){
+    var v = globalMin + (globalMax-globalMin) * i/4;
+    axis.appendChild(el("div", {class:"boxplot-tick", style:"top:"+((1-i/4)*CH)+"px;"}, [fmt0(v)]));
+  }
+
+  var row = el("div", {class:"boxplot-row"});
+  data.forEach(function(d){
+    var chart = el("div", {class:"boxplot-chart", style:"height:"+CH+"px;"});
+    var topMax = toTop(d.max), topMin = toTop(d.min), topQ1 = toTop(d.q1), topQ3 = toTop(d.q3), topMed = toTop(d.median);
+    chart.appendChild(el("div", {class:"boxplot-whisker", style:"top:"+topMax+"px;height:"+Math.max(2,(topMin-topMax))+"px;"}));
+    chart.appendChild(el("div", {class:"boxplot-cap", style:"top:"+topMax+"px;"}));
+    chart.appendChild(el("div", {class:"boxplot-cap", style:"top:"+topMin+"px;"}));
+    chart.appendChild(el("div", {
+      class:"boxplot-box", style:"top:"+topQ3+"px;height:"+Math.max(2,(topQ1-topQ3))+"px;",
+      title: teamName(d.u) + ": max " + fmt1(d.max) + ", Q3 " + fmt1(d.q3) + ", median " + fmt1(d.median) + ", Q1 " + fmt1(d.q1) + ", min " + fmt1(d.min)
+    }));
+    chart.appendChild(el("div", {class:"boxplot-median", style:"top:"+topMed+"px;"}));
+    var col = el("div", {class:"boxplot-col", onclick:function(){ if (d.uid) location.hash = "#team/" + d.uid; }}, [
+      chart,
+      avatarEl(d.u, "sm"),
+      el("div", {class:"boxplot-label"}, [teamName(d.u)])
+    ]);
+    row.appendChild(col);
+  });
+
+  var wrap = el("div", {class:"boxplot-wrap"}, [axis, row]);
+  return wrap;
 }
 
 function buildWeekSelect(weeks){
@@ -1883,6 +2224,8 @@ function render(){
     else renderStandings();
   } else if (hash.indexOf("#records") === 0){
     renderRecords();
+  } else if (hash.indexOf("#victory") === 0){
+    renderVictoryRoad();
   } else if (hash.indexOf("#analytics") === 0){
     renderAnalytics();
   } else {
@@ -1925,6 +2268,12 @@ async function boot(){
     $("#leagueName").textContent = latest.league.name || "League HQ";
     $("#leagueSub").textContent = latest.rosters.length + " teams · " + STATE.seasons.length + " season" + (STATE.seasons.length>1?"s":"") + " of history tracked";
     $("#seasonPill").textContent = latest.league.season + " Season";
+    if (latest.league.avatar){
+      var logo = $("#leagueLogo");
+      logo.src = CDN + "/avatars/" + latest.league.avatar;
+      logo.onerror = function(){ logo.style.display = "none"; };
+      logo.style.display = "block";
+    }
     setTabsVisible(true);
 
     STATE.ready = true;
