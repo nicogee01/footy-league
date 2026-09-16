@@ -205,6 +205,70 @@
   .record-sub-value{font-family:'Anton',sans-serif;color:var(--chalk);font-size:14px;flex-shrink:0;}
   .record-sub-ctx{color:var(--chalk-dimmer);font-size:10.5px;flex-shrink:0;max-width:220px;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
+  /* ---------- transactions: card list ---------- */
+  .txn-tag{font-size:11.5px;font-weight:700;letter-spacing:.04em;padding:5px 12px;text-transform:uppercase;flex-shrink:0;}
+  .txn-tag-type{background:rgba(111,168,245,0.14);color:var(--gold);border:1px solid var(--gold-dim);}
+  .txn-tag-bidders{background:rgba(231,184,78,0.14);color:var(--chalk);border:1px solid var(--line-strong);}
+  .txn-card{border:1px solid var(--line-strong);background:var(--field2);margin-bottom:16px;cursor:pointer;}
+  .txn-card:hover{border-color:var(--gold-dim);}
+  .txn-card-top{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap;}
+  .txn-card-date{font-size:13px;color:var(--chalk-dimmer);margin-left:auto;}
+  .txn-card-body{display:flex;align-items:center;padding:20px;gap:18px;}
+  .txn-side{flex:1;min-width:0;}
+  .txn-side-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .txn-side-head .avatar,.txn-side-head .avatar-fallback{width:32px;height:32px;font-size:11px;flex-shrink:0;}
+  .txn-side-team{font-size:15px;font-weight:600;color:var(--chalk);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .txn-side-label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;flex-shrink:0;}
+  .txn-side-label.add{color:var(--gold);}
+  .txn-side-label.drop{color:var(--crimson);}
+  .txn-side-player{display:flex;align-items:center;gap:14px;margin-bottom:10px;}
+  .txn-side-player:last-child{margin-bottom:0;}
+  .txn-side-img{width:56px;height:56px;margin:0;flex-shrink:0;}
+  .txn-side-player-name{font-size:16px;font-weight:600;}
+  .txn-side-player-meta{font-size:12.5px;color:var(--chalk-dimmer);margin-top:2px;}
+  .txn-mid{flex:0 0 74px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;}
+  .txn-mid-amt{font-family:'Anton',sans-serif;font-size:30px;color:var(--chalk);}
+  .txn-mid-label{font-size:10.5px;color:var(--chalk-dimmer);letter-spacing:.06em;}
+  .txn-mid-icon{width:28px;height:28px;border-radius:50%;border:1px solid var(--line-strong);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;color:var(--gold-dim);font-size:10px;font-weight:700;margin-top:8px;}
+
+  /* ---------- transactions: detail modal ---------- */
+  .txn-modal-overlay{position:fixed;inset:0;background:rgba(4,4,5,0.78);z-index:80;display:flex;align-items:flex-start;justify-content:center;padding:48px 16px;overflow-y:auto;}
+  .txn-modal{background:var(--field2);border:1px solid var(--line-strong);max-width:640px;width:100%;}
+  .txn-modal-head{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line);}
+  .txn-modal-week{font-size:12.5px;font-weight:700;color:var(--chalk-dim);letter-spacing:.03em;}
+  .txn-modal-nav{display:flex;gap:6px;margin-left:auto;}
+  .txn-modal-nav button,.txn-modal-close{width:30px;height:30px;border:1px solid var(--line-strong);background:transparent;color:var(--chalk-dim);cursor:pointer;font-size:15px;font-family:inherit;}
+  .txn-modal-nav button:hover,.txn-modal-close:hover{color:var(--chalk);border-color:var(--gold-dim);}
+  .txn-modal-nav button:disabled{opacity:0.25;cursor:not-allowed;}
+  .txn-modal-nav button:disabled:hover{border-color:var(--line-strong);}
+  .txn-modal-body{padding:20px;}
+  .txn-modal-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:22px;flex-wrap:wrap;}
+  .txn-modal-claimed{cursor:pointer;}
+  .txn-modal-claimed-label{font-size:11px;color:var(--gold-dim);letter-spacing:.05em;text-transform:uppercase;font-weight:600;}
+  .txn-modal-team{display:flex;align-items:center;gap:12px;margin-top:8px;}
+  .txn-modal-team-name{font-family:'Anton',sans-serif;font-size:22px;line-height:1;}
+  .txn-modal-owner{font-size:12px;color:var(--chalk-dimmer);margin-top:2px;}
+  .txn-modal-bid-block{text-align:right;}
+  .txn-modal-bid-label{font-size:11px;color:var(--chalk-dimmer);letter-spacing:.04em;text-transform:uppercase;}
+  .txn-modal-bid-amt{font-family:'Anton',sans-serif;font-size:34px;color:var(--gold);line-height:1;margin-top:4px;}
+  .txn-modal-players{display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap;}
+  .txn-modal-player-col{flex:1;min-width:220px;display:flex;flex-direction:column;gap:10px;}
+  .txn-modal-player-card{display:flex;align-items:center;gap:12px;border-left:3px solid;padding:10px 14px;background:var(--field3);}
+  .txn-modal-player-card.add{border-color:var(--gold);}
+  .txn-modal-player-card.drop{border-color:var(--crimson);}
+  .txn-modal-player-img{width:60px;height:60px;margin:0;flex-shrink:0;}
+  .txn-modal-player-name{font-size:15px;font-weight:600;}
+  .txn-modal-player-meta{font-size:12px;color:var(--chalk-dimmer);margin-top:2px;}
+  .txn-modal-bids-title{font-size:11px;color:var(--gold-dim);letter-spacing:.05em;text-transform:uppercase;font-weight:600;margin-bottom:10px;}
+  .txn-modal-bid-row{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid var(--line-strong);margin-bottom:6px;cursor:pointer;}
+  .txn-modal-bid-row:hover{border-color:var(--gold-dim);}
+  .txn-modal-bid-row.won{border-color:var(--gold);background:rgba(231,184,78,0.08);}
+  .txn-modal-bid-row-amt{font-family:'Anton',sans-serif;font-size:16px;color:var(--chalk);width:48px;flex-shrink:0;}
+  .txn-modal-bid-row-name{flex:1;font-size:13px;font-weight:600;min-width:0;}
+  .txn-modal-bid-tag{font-size:9.5px;font-weight:700;padding:3px 9px;letter-spacing:.04em;flex-shrink:0;}
+  .txn-modal-bid-tag.won{background:var(--gold);color:#1a1204;}
+  .txn-modal-bid-tag.outbid{border:1px solid var(--line-strong);color:var(--chalk-dimmer);}
+
   /* ---------- league awards ---------- */
   .award-season{margin-bottom:24px;}
   .award-season-year{font-family:'Anton',sans-serif;color:var(--gold);font-size:19px;margin-bottom:10px;}
@@ -398,6 +462,22 @@
     .award-name{font-size:12.5px;}
     .award-player-row{font-size:10px;}
 
+    /* transactions */
+    .txn-card-body{flex-direction:column;gap:18px;padding:16px;}
+    .txn-mid{flex-direction:row;justify-content:flex-start;gap:10px;padding:2px 0;}
+    .txn-mid-icon{margin-top:0;}
+    .txn-side-img{width:46px;height:46px;}
+    .txn-side-player-name{font-size:14px;}
+    .txn-side-player-meta{font-size:11px;}
+    .txn-side-team{font-size:13.5px;}
+    .txn-modal-body{padding:16px;}
+    .txn-modal-top{gap:16px;}
+    .txn-modal-bid-block{text-align:left;}
+    .txn-modal-team-name{font-size:18px;}
+    .txn-modal-bid-amt{font-size:26px;}
+    .txn-modal-players{flex-direction:column;}
+    .txn-modal-overlay{padding:20px 12px;}
+
     /* analytics: scatter */
     .scatter-wrap{padding-bottom:100%;}
     .scatter-avatar{width:36px;height:36px;}
@@ -462,6 +542,7 @@
       <a href="#standings" data-tab="standings">Standings</a>
       <a href="#records" data-tab="records">Hall of Records</a>
       <a href="#victory" data-tab="victory">Victory Road</a>
+      <a href="#transactions" data-tab="transactions">Transactions</a>
       <a href="#analytics" data-tab="analytics">Analytics</a>
     </nav>
   </div>
@@ -667,6 +748,7 @@ var STATE = {
   h2h: {},              // user_id -> { opponentUserId -> {w,l,t,pf,pa} }
   seasonAllPlay: {},    // league_id -> user_id -> {w,l,t}
   seasonAwards: [],     // one entry per season: {season, seasonObj, champUid, champRosterId, runnerUid, thirdUid, toiletUid}
+  transactionsBySeasonId: {}, // league_id -> raw transaction array (lazy-loaded)
   records: null,
   ready: false
 };
@@ -1052,7 +1134,7 @@ function userLine(uid, opts){
 
 function setTabsVisible(v){ $("#tabs").style.display = v ? "flex" : "none"; }
 function updateNavActive(hash){
-  var tab = hash.indexOf("#records")===0 ? "records" : (hash.indexOf("#victory")===0 ? "victory" : (hash.indexOf("#analytics")===0 ? "analytics" : "standings"));
+  var tab = hash.indexOf("#records")===0 ? "records" : (hash.indexOf("#victory")===0 ? "victory" : (hash.indexOf("#transactions")===0 ? "transactions" : (hash.indexOf("#analytics")===0 ? "analytics" : "standings")));
   document.querySelectorAll("nav.tabs a").forEach(function(a){
     a.classList.toggle("active", a.getAttribute("data-tab")===tab);
   });
@@ -1797,6 +1879,297 @@ function renderVictoryRoad(){
   else app.appendChild(el("div", {class:"foot-note"}, ["No completed playoff brackets found yet for this league."]));
 }
 
+/* ============================= RENDER: TRANSACTIONS ============================= */
+var transactionsSeasonIdx = null;
+var transactionsTypeFilter = "all"; // all | waiver | free_agent
+var transactionsTeamFilter = "all"; // "all" | user_id
+var txnModalIndex = null;
+var txnCurrentMoves = [];
+
+async function loadTransactionsForSeason(season){
+  var leagueId = season.league.league_id;
+  if (STATE.transactionsBySeasonId[leagueId]) return STATE.transactionsBySeasonId[leagueId];
+  var jobs = [];
+  for (var w=0; w<=18; w++){
+    (function(w){
+      jobs.push(fetchJSON(API + "/league/" + leagueId + "/transactions/" + w));
+    })(w);
+  }
+  var results = await Promise.all(jobs);
+  var all = [];
+  results.forEach(function(arr){ if (Array.isArray(arr)) all = all.concat(arr); });
+  STATE.transactionsBySeasonId[leagueId] = all;
+  return all;
+}
+
+/* Turn raw transactions into displayable "moves": each completed waiver or
+   free-agent pickup, with any other (failed) bids on that same player that
+   week attached as competing offers. */
+function buildWaiverMoves(season, transactions){
+  var relevant = transactions.filter(function(t){ return t.type === "waiver" || t.type === "free_agent"; });
+  var completed = relevant.filter(function(t){ return t.status === "complete"; });
+  var failed = relevant.filter(function(t){ return t.status === "failed" && t.type === "waiver"; });
+
+  var failedByPlayerWeek = {};
+  failed.forEach(function(t){
+    var week = t.leg;
+    var addedIds = t.adds ? Object.keys(t.adds) : [];
+    addedIds.forEach(function(pid){
+      var key = week + "|" + pid;
+      (failedByPlayerWeek[key] = failedByPlayerWeek[key] || []).push(t);
+    });
+  });
+
+  var moves = completed.map(function(t){
+    var week = t.leg;
+    var rosterId = t.roster_ids && t.roster_ids[0];
+    var uid = rosterId != null ? season.rosterOwner[rosterId] : null;
+    var addedPids = t.adds ? Object.keys(t.adds) : [];
+    var droppedPids = t.drops ? Object.keys(t.drops) : [];
+    var bidAmount = (t.settings && t.settings.waiver_bid != null) ? t.settings.waiver_bid : null;
+    var competing = [];
+    if (t.type === "waiver"){
+      addedPids.forEach(function(pid){
+        var key = week + "|" + pid;
+        (failedByPlayerWeek[key] || []).forEach(function(f){
+          var fRosterId = f.roster_ids && f.roster_ids[0];
+          var fUid = fRosterId != null ? season.rosterOwner[fRosterId] : null;
+          var fAmount = (f.settings && f.settings.waiver_bid != null) ? f.settings.waiver_bid : null;
+          competing.push({uid:fUid, amount:fAmount});
+        });
+      });
+      competing.sort(function(a,b){ return (b.amount||0) - (a.amount||0); });
+    }
+    return {
+      id: t.transaction_id, type: t.type, week: week, created: t.created || 0,
+      uid: uid, addedPids: addedPids, droppedPids: droppedPids, bidAmount: bidAmount,
+      competing: competing
+    };
+  });
+
+  moves.sort(function(a,b){ return b.created - a.created; });
+  return moves;
+}
+
+function buildTxnSeasonSelect(){
+  var sel = el("select", {class:"ctrl", onchange:function(e){ transactionsSeasonIdx = parseInt(e.target.value,10); txnModalIndex = null; renderTransactions(); }});
+  STATE.seasons.forEach(function(s, idx){
+    var opt = el("option", {value:idx}, [s.league.season]);
+    if (idx === transactionsSeasonIdx) opt.selected = true;
+    sel.appendChild(opt);
+  });
+  return sel;
+}
+function buildTxnTypeSelect(){
+  var sel = el("select", {class:"ctrl", onchange:function(e){ transactionsTypeFilter = e.target.value; txnModalIndex = null; renderTransactions(); }});
+  [["all","All Moves"],["waiver","Waivers Only"],["free_agent","Free Agents Only"]].forEach(function(p){
+    var opt = el("option", {value:p[0]}, [p[1]]);
+    if (p[0] === transactionsTypeFilter) opt.selected = true;
+    sel.appendChild(opt);
+  });
+  return sel;
+}
+function buildTxnTeamSelect(season){
+  var sel = el("select", {class:"ctrl", onchange:function(e){ transactionsTeamFilter = e.target.value; txnModalIndex = null; renderTransactions(); }});
+  var optAll = el("option", {value:"all"}, ["All Teams"]);
+  if (transactionsTeamFilter === "all") optAll.selected = true;
+  sel.appendChild(optAll);
+  season.users.slice().sort(function(a,b){ return teamName(a).localeCompare(teamName(b)); }).forEach(function(u){
+    var opt = el("option", {value:u.user_id}, [teamName(u)]);
+    if (u.user_id === transactionsTeamFilter) opt.selected = true;
+    sel.appendChild(opt);
+  });
+  return sel;
+}
+
+function txnPlayerMeta(pid){
+  var info = STATE.playersInfo[pid];
+  var isDef = /^[A-Z]{2,4}$/.test(pid) && !info;
+  return {
+    name: isDef ? pid : (info ? info.n : pid),
+    meta: isDef ? "DEF" : (info ? (info.pos + " · " + info.team) : "")
+  };
+}
+
+function buildTxnSidePlayer(pid){
+  var pm = txnPlayerMeta(pid);
+  var img = playerImgEl(pid, STATE.playersInfo);
+  img.className = "player-img txn-side-img";
+  return el("div", {class:"txn-side-player"}, [
+    img,
+    el("div", {}, [
+      el("div", {class:"txn-side-player-name"}, [pm.name]),
+      el("div", {class:"txn-side-player-meta"}, [pm.meta])
+    ])
+  ]);
+}
+
+/* ---- card (list view) ---- */
+function buildTxnCard(move, index){
+  var u = STATE.users[move.uid];
+  var totalBidders = move.competing.length ? move.competing.length + 1 : 0;
+
+  var top = el("div", {class:"txn-card-top"}, [
+    el("span", {class:"txn-tag txn-tag-type"}, [move.type==="waiver" ? "Waiver Wire" : "Free Agent"]),
+    totalBidders ? el("span", {class:"txn-tag txn-tag-bidders"}, [totalBidders + " Bidders"]) : null,
+    el("span", {class:"txn-card-date"}, ["Wk " + move.week])
+  ]);
+
+  var addedSide = el("div", {class:"txn-side"}, [
+    el("div", {class:"txn-side-head"}, [avatarEl(u,"sm"), el("span",{class:"txn-side-team"},[teamName(u)]), el("span",{class:"txn-side-label add"},["Adds"])])
+  ].concat(move.addedPids.length ? move.addedPids.map(buildTxnSidePlayer) : [el("div",{class:"foot-note"},["—"])]));
+
+  var droppedSide = el("div", {class:"txn-side"}, [
+    el("div", {class:"txn-side-head"}, [avatarEl(u,"sm"), el("span",{class:"txn-side-team"},[teamName(u)]), el("span",{class:"txn-side-label drop"},["Drops"])])
+  ].concat(move.droppedPids.length ? move.droppedPids.map(buildTxnSidePlayer) : [el("div",{class:"foot-note"},["No drop"])]));
+
+  var mid = el("div", {class:"txn-mid"}, move.bidAmount != null ? [
+    el("div", {class:"txn-mid-amt"}, ["$" + move.bidAmount]),
+    el("div", {class:"txn-mid-label"}, ["FAAB"]),
+    el("div", {class:"txn-mid-icon"}, [el("span",{},["+"]), el("span",{},["–"])])
+  ] : [el("div", {class:"txn-mid-icon"}, [el("span",{},["+"]), el("span",{},["–"])])]);
+
+  var body = el("div", {class:"txn-card-body"}, [addedSide, mid, droppedSide]);
+  return el("div", {class:"txn-card", onclick:function(){ txnModalIndex = index; renderTransactions(); }}, [top, body]);
+}
+
+/* ---- modal (detail view) ---- */
+function buildTxnModalPlayerCard(pid, kind){
+  var pm = txnPlayerMeta(pid);
+  var img = playerImgEl(pid, STATE.playersInfo);
+  img.className = "player-img txn-modal-player-img";
+  return el("div", {class:"txn-modal-player-card " + kind}, [
+    img,
+    el("div", {}, [
+      el("div", {class:"txn-modal-player-name"}, [pm.name]),
+      el("div", {class:"txn-modal-player-meta"}, [pm.meta])
+    ])
+  ]);
+}
+
+function buildTxnModal(moves, index){
+  var move = moves[index];
+  var u = STATE.users[move.uid];
+
+  function closeModal(){ txnModalIndex = null; renderTransactions(); }
+  function goPrev(){ if (index > 0){ txnModalIndex = index-1; renderTransactions(); } }
+  function goNext(){ if (index < moves.length-1){ txnModalIndex = index+1; renderTransactions(); } }
+
+  var overlay = el("div", {class:"txn-modal-overlay", onclick:function(e){ if (e.target === overlay) closeModal(); }});
+  var modal = el("div", {class:"txn-modal"});
+
+  var head = el("div", {class:"txn-modal-head"}, [
+    el("span", {class:"txn-tag txn-tag-type"}, [move.type==="waiver" ? "Waiver Claim" : "Free Agent"]),
+    el("span", {class:"txn-modal-week"}, ["Week " + move.week]),
+    el("div", {class:"txn-modal-nav"}, [
+      el("button", {disabled: index<=0 ? "disabled" : null, onclick:goPrev}, ["‹"]),
+      el("button", {disabled: index>=moves.length-1 ? "disabled" : null, onclick:goNext}, ["›"])
+    ]),
+    el("button", {class:"txn-modal-close", onclick:closeModal}, ["✕"])
+  ]);
+
+  var body = el("div", {class:"txn-modal-body"});
+  body.appendChild(el("div", {class:"txn-modal-top"}, [
+    el("div", {class:"txn-modal-claimed", onclick:function(){ if (move.uid){ closeModal(); location.hash = "#team/" + move.uid; } }}, [
+      el("div", {class:"txn-modal-claimed-label"}, [move.type==="waiver" ? "Claimed By" : "Added By"]),
+      el("div", {class:"txn-modal-team"}, [
+        avatarEl(u, "sm"),
+        el("div", {}, [
+          el("div", {class:"txn-modal-team-name"}, [teamName(u)]),
+          el("div", {class:"txn-modal-owner"}, [u ? (u.display_name||"") : ""])
+        ])
+      ])
+    ]),
+    move.bidAmount != null ? el("div", {class:"txn-modal-bid-block"}, [
+      el("div", {class:"txn-modal-bid-label"}, ["Winning Bid"]),
+      el("div", {class:"txn-modal-bid-amt"}, ["$" + move.bidAmount])
+    ]) : null
+  ]));
+
+  var playersRow = el("div", {class:"txn-modal-players"});
+  playersRow.appendChild(el("div", {class:"txn-modal-player-col"}, [
+    el("div", {class:"txn-side-label add"}, ["Added"])
+  ].concat(move.addedPids.length ? move.addedPids.map(function(pid){ return buildTxnModalPlayerCard(pid,"add"); }) : [el("div",{class:"foot-note"},["Nothing added"])])));
+  playersRow.appendChild(el("div", {class:"txn-modal-player-col"}, [
+    el("div", {class:"txn-side-label drop"}, ["Dropped"])
+  ].concat(move.droppedPids.length ? move.droppedPids.map(function(pid){ return buildTxnModalPlayerCard(pid,"drop"); }) : [el("div",{class:"foot-note"},["No player dropped"])])));
+  body.appendChild(playersRow);
+
+  if (move.type === "waiver"){
+    var allBids = [{uid:move.uid, amount:move.bidAmount, won:true}].concat(move.competing.map(function(c){ return {uid:c.uid, amount:c.amount, won:false}; }));
+    body.appendChild(el("div", {class:"txn-modal-bids-title"}, ["FAAB Bids · " + allBids.length + " bid" + (allBids.length>1?"s":"")]));
+    allBids.forEach(function(b){
+      var bu = STATE.users[b.uid];
+      body.appendChild(el("div", {class:"txn-modal-bid-row" + (b.won?" won":""), onclick:function(){ if (b.uid){ closeModal(); location.hash = "#team/" + b.uid; } }}, [
+        el("span", {class:"txn-modal-bid-row-amt"}, ["$" + (b.amount != null ? b.amount : 0)]),
+        avatarEl(bu, "sm"),
+        el("span", {class:"txn-modal-bid-row-name"}, [teamName(bu)]),
+        el("span", {class:"txn-modal-bid-tag " + (b.won?"won":"outbid")}, [b.won ? "WON" : "OUTBID"])
+      ]));
+    });
+  }
+
+  modal.appendChild(head);
+  modal.appendChild(body);
+  overlay.appendChild(modal);
+  return overlay;
+}
+
+document.addEventListener("keydown", function(e){
+  if (txnModalIndex == null || !txnCurrentMoves.length) return;
+  if (e.key === "Escape"){ txnModalIndex = null; renderTransactions(); }
+  else if (e.key === "ArrowLeft" && txnModalIndex > 0){ txnModalIndex--; renderTransactions(); }
+  else if (e.key === "ArrowRight" && txnModalIndex < txnCurrentMoves.length-1){ txnModalIndex++; renderTransactions(); }
+});
+
+async function renderTransactions(){
+  var app = $("#app");
+  app.innerHTML = "";
+  if (transactionsSeasonIdx == null) transactionsSeasonIdx = STATE.seasons.length - 1;
+  var season = STATE.seasons[transactionsSeasonIdx];
+
+  var head = el("div", {class:"panel-head"}, [
+    el("h2", {style:"font-size:20px;margin:0;"}, ["Transactions"]),
+    el("div", {style:"display:flex;gap:8px;flex-wrap:wrap;"}, [
+      buildTxnSeasonSelect(), buildTxnTypeSelect(), buildTxnTeamSelect(season)
+    ])
+  ]);
+  app.appendChild(head);
+  app.appendChild(el("div", {class:"analytics-intro"}, ["Waiver and free-agent moves for " + season.league.season + ". Tap any transaction for the full bid breakdown."]));
+
+  var leagueId = season.league.league_id;
+  var txns = STATE.transactionsBySeasonId[leagueId];
+  if (!txns){
+    var loadingBox = el("div", {class:"loading-screen", style:"min-height:160px;"}, [
+      el("div", {class:"spinner"}),
+      el("div", {class:"msg"}, ["Loading transactions…"])
+    ]);
+    app.appendChild(loadingBox);
+    txns = await loadTransactionsForSeason(season);
+    if (location.hash.indexOf("#transactions") !== 0) return; // navigated away while loading
+    if (STATE.seasons[transactionsSeasonIdx] !== season) return; // season changed while loading
+    loadingBox.remove();
+  }
+
+  var moves = buildWaiverMoves(season, txns);
+  if (transactionsTypeFilter !== "all") moves = moves.filter(function(m){ return m.type === transactionsTypeFilter; });
+  if (transactionsTeamFilter !== "all") moves = moves.filter(function(m){ return m.uid === transactionsTeamFilter; });
+  txnCurrentMoves = moves;
+
+  if (!moves.length){
+    app.appendChild(el("div", {class:"foot-note"}, ["No matching transactions found for " + season.league.season + "."]));
+    return;
+  }
+
+  var list = el("div", {});
+  moves.forEach(function(m, i){ list.appendChild(buildTxnCard(m, i)); });
+  app.appendChild(list);
+
+  if (txnModalIndex != null && txnModalIndex < moves.length){
+    app.appendChild(buildTxnModal(moves, txnModalIndex));
+  }
+}
+
 /* ============================= RENDER: ANALYTICS ============================= */
 var analyticsWeek = null;
 var analyticsPosition = "RB";
@@ -2226,6 +2599,8 @@ function render(){
     renderRecords();
   } else if (hash.indexOf("#victory") === 0){
     renderVictoryRoad();
+  } else if (hash.indexOf("#transactions") === 0){
+    renderTransactions();
   } else if (hash.indexOf("#analytics") === 0){
     renderAnalytics();
   } else {
