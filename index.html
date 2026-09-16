@@ -1397,7 +1397,7 @@ function renderTeamDetail(uid){
       wBody.appendChild(tr);
     });
     wTable.appendChild(wBody);
-    app.appendChild(wTable);
+    app.appendChild(el("div", {class:"standings-table-wrap"}, [wTable]));
   } else {
     app.appendChild(el("div", {class:"foot-note"}, ["No games played yet this season."]));
   }
