@@ -590,6 +590,7 @@ function el(tag, attrs, children){
   return e;
 }
 function fmt1(n){ return (Math.round((n||0)*10)/10).toFixed(1); }
+function fmt2(n){ return (Math.round((n||0)*100)/100).toFixed(2); }
 function fmt0(n){ return Math.round(n||0).toString(); }
 function initials(name){
   if (!name) return "?";
@@ -1205,7 +1206,9 @@ var STANDINGS_SORT_VALUE = {
   winpct: function(r){ var gp=r.wins+r.losses+r.ties; return gp ? (r.wins+r.ties*0.5)/gp : -1; },
   allplay: function(r){ return r.ap ? (r.ap.w + r.ap.t*0.5) : -1; },
   pf: function(r){ return r.pf; },
+  avgpf: function(r){ var gp=r.wins+r.losses+r.ties; return gp ? r.pf/gp : -1; },
   pa: function(r){ return r.pa; },
+  avgpa: function(r){ var gp=r.wins+r.losses+r.ties; return gp ? r.pa/gp : -1; },
   maxpf: function(r){ return r.maxPf == null ? -1 : r.maxPf; }
 };
 var STANDINGS_COLS = [
@@ -1214,7 +1217,9 @@ var STANDINGS_COLS = [
   {key:"winpct", label:"Win%"},
   {key:"allplay", label:"All-Play", title:"Record if this team had played every other team, every week"},
   {key:"pf", label:"PF"},
+  {key:"avgpf", label:"Avg PF"},
   {key:"pa", label:"PA"},
+  {key:"avgpa", label:"Avg PA"},
   {key:"maxpf", label:"Max PF"}
 ];
 
@@ -1298,10 +1303,10 @@ function renderStandings(){
   var showLines = standingsMode === "season" && baseRows.length > 5 && isDefaultSort;
   rows.forEach(function(r, i){
     if (showLines && r.defaultRank === 6){
-      tbody.appendChild(el("tr", {class:"standings-divider"}, [el("td", {colspan:"8"}, ["Playoff line"])]));
+      tbody.appendChild(el("tr", {class:"standings-divider"}, [el("td", {colspan:"10"}, ["Playoff line"])]));
     }
     if (showLines && baseRows.length > 10 && r.defaultRank === baseRows.length - 4){
-      tbody.appendChild(el("tr", {class:"standings-divider"}, [el("td", {colspan:"8"}, ["Bottom 5"])]));
+      tbody.appendChild(el("tr", {class:"standings-divider"}, [el("td", {colspan:"10"}, ["Bottom 5"])]));
     }
     var isStar = r.uid === starUid;
     var tr = el("tr", {"data-rank": r.defaultRank, class: isStar ? "wildcard-row" : "", onclick:function(){ if (r.uid) location.hash = "#team/" + r.uid; }});
@@ -1320,7 +1325,9 @@ function renderStandings(){
     tr.appendChild(el("td", {class:"num dim"}, [(function(){ var gp=r.wins+r.losses+r.ties; return gp ? fmt1((r.wins+r.ties*0.5)/gp*100) + "%" : "—"; })()]));
     tr.appendChild(el("td", {class:"num dim"}, [r.ap ? (r.ap.w + "-" + r.ap.l + (r.ap.t ? "-"+r.ap.t : "")) : "—"]));
     tr.appendChild(el("td", {class:"num"}, [fmt1(r.pf)]));
+    tr.appendChild(el("td", {class:"num dim"}, [(function(){ var gp=r.wins+r.losses+r.ties; return gp ? fmt2(r.pf/gp) : "—"; })()]));
     tr.appendChild(el("td", {class:"num dim"}, [fmt1(r.pa)]));
+    tr.appendChild(el("td", {class:"num dim"}, [(function(){ var gp=r.wins+r.losses+r.ties; return gp ? fmt2(r.pa/gp) : "—"; })()]));
     tr.appendChild(el("td", {class:"num badge-max"}, [r.maxPf != null ? fmt1(r.maxPf) : "—"]));
     tbody.appendChild(tr);
   });
