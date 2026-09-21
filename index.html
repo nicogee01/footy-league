@@ -1217,8 +1217,8 @@ var STANDINGS_COLS = [
   {key:"winpct", label:"Win%"},
   {key:"allplay", label:"All-Play", title:"Record if this team had played every other team, every week"},
   {key:"pf", label:"PF"},
-  {key:"avgpf", label:"Avg PF"},
   {key:"pa", label:"PA"},
+  {key:"avgpf", label:"Avg PF"},
   {key:"avgpa", label:"Avg PA"},
   {key:"maxpf", label:"Max PF"}
 ];
@@ -1325,8 +1325,8 @@ function renderStandings(){
     tr.appendChild(el("td", {class:"num dim"}, [(function(){ var gp=r.wins+r.losses+r.ties; return gp ? fmt1((r.wins+r.ties*0.5)/gp*100) + "%" : "—"; })()]));
     tr.appendChild(el("td", {class:"num dim"}, [r.ap ? (r.ap.w + "-" + r.ap.l + (r.ap.t ? "-"+r.ap.t : "")) : "—"]));
     tr.appendChild(el("td", {class:"num"}, [fmt1(r.pf)]));
-    tr.appendChild(el("td", {class:"num dim"}, [(function(){ var gp=r.wins+r.losses+r.ties; return gp ? fmt2(r.pf/gp) : "—"; })()]));
     tr.appendChild(el("td", {class:"num dim"}, [fmt1(r.pa)]));
+    tr.appendChild(el("td", {class:"num dim"}, [(function(){ var gp=r.wins+r.losses+r.ties; return gp ? fmt2(r.pf/gp) : "—"; })()]));
     tr.appendChild(el("td", {class:"num dim"}, [(function(){ var gp=r.wins+r.losses+r.ties; return gp ? fmt2(r.pa/gp) : "—"; })()]));
     tr.appendChild(el("td", {class:"num badge-max"}, [r.maxPf != null ? fmt1(r.maxPf) : "—"]));
     tbody.appendChild(tr);
