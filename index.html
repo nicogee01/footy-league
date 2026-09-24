@@ -3746,7 +3746,7 @@ function renderMatchups(app, arg){
     if (!document.body.contains(list)) return;
     var st = weekStatus(season, week, raw);
     var games = pairMatchups(season, raw);
-    var openByDefault = season === STATE.currentSeason && week === currentWeek();
+    var openByDefault = false;   // every matchup starts collapsed; tap one to open its box score
     status.innerHTML = "";
     status.appendChild(statusTag(st, week));
     if (isPlayoffWeek(lg, week)) status.appendChild(el("span", {class:"tag tag-goal"}, [icon("trophy"), "Playoffs"]));
