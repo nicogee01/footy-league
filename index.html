@@ -1824,6 +1824,20 @@
   .rl-chip.b-white::before{background:#f4efe0;} .rl-chip.b-amber::before{background:#ffb224;box-shadow:0 0 6px rgba(255,178,36,.8);}
   .rl-chip.b-green::before{background:#5fd18a;box-shadow:0 0 6px rgba(95,209,138,.8);} .rl-chip.b-red::before{background:#ff5040;box-shadow:0 0 6px rgba(255,80,64,.9);}
   @media (prefers-reduced-motion:reduce){ .rb-status .st.live::before{animation:none;} }
+
+  /* scoreboard card v2: stat cells + caption instead of the box strip */
+  .rb-led{height:9.8em;}
+  .rb-who{top:17.3em;}
+  .rb-who > b{font-size:1.6em;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
+  .rb-av{width:3em;height:3em;}
+  .rb-cells{position:absolute;left:1.4em;right:1.4em;top:20.8em;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid #232a31;border-radius:.5em;background:#07090b;overflow:hidden;}
+  .rb-cell{padding:.6em .6em .7em;min-width:0;text-align:center;}
+  .rb-cell + .rb-cell{border-left:1px solid #232a31;}
+  .rb-cell span{display:block;font-family:'IBM Plex Mono',monospace;font-size:.82em;letter-spacing:.08em;text-transform:uppercase;color:#7d8b98;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .rb-cell b{display:block;margin-top:.25em;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:1.3em;color:var(--chalk);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .rb-cell:last-child b{color:#95a4b3;}
+  .rb-cap{position:absolute;left:1.5em;right:1.5em;top:24.6em;font-size:1.08em;line-height:1.35;color:#bcc7d1;text-align:center;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  .rb-status .tier{color:var(--bulb);text-shadow:0 0 .6em var(--bulbGlow);}
 </style>
 </head>
 <body>
@@ -4927,7 +4941,7 @@ function buildRecordCarousel(items, deal, origin){
     info.appendChild(el("h2", {class:"rc-title"}, [it.label]));
     function row(k, v){ return el("div", {class:"rc-row"}, [el("span", {}, [k]), el("b", {}, v)]); }
     info.appendChild(row("Holder", [f.uids.map(function(uid){ return teamName(STATE.users[uid]); }).join(" & ")]));
-    info.appendChild(row("Record", [f.value]));
+    info.appendChild(row("Record", [it.board ? it.board.led + " " + it.board.unit.toLowerCase() : f.value]));
     if (it.board){
       info.appendChild(row("Rarity", [el("span", {class:"rl-chip b-" + it.btier.k}, [it.btier.name])]));
       info.appendChild(row("Status", [it.board.status]));
@@ -5089,58 +5103,68 @@ function weekMedian(season, week){
   return (weekMedianCache[k] = m);
 }
 function recLabel(r){ var w = 0, l = 0, t = 0; r.forEach(function(x){ if (x.res === "W") w++; else if (x.res === "L") l++; else t++; }); return w + "-" + l + (t ? "-" + t : ""); }
+/* Scoreboard card content: big number, three labelled stat cells, one plain-English line, status.
+   Every value (including #2) is in the same unit as the big number. */
 function boardFor(key, arr, seg){
   var e = arr[0], f = RECORD_FORMATTERS[key](e, seg), uid = f.uids[0], res = segResults(uid);
   var cur = STATE.currentSeason.league.season;
-  var B = {uid:uid, led:"", unit:"", sub:"", chips:[], status:"", live:false, season:cur, second: arr[1] ? "#2 · " + RECORD_FORMATTERS[key](arr[1], seg).value : "No challenger"};
+  var e2 = arr[1] || null, uid2 = e2 ? RECORD_FORMATTERS[key](e2, seg).uids[0] : null;
+  var lastWk = res.length ? res[res.length - 1].week : null;
+  function plural(n, one, many){ return n + " " + (n === 1 ? one : many); }
+  var B = {uid:uid, led:"", unit:"", cells:[], caption:"", status:"", live:false, season:cur};
+  function second(val){ B.cells.push(e2 ? ["#2 " + tn(uid2), val] : ["#2", "—"]); }
   if (key === "winStreak" || key === "lossStreak"){
-    var endIdx = -1;
+    var win = key === "winStreak", endIdx = -1;
     res.forEach(function(r, i){ if (r.season === e.ctx.endSeason && r.week === e.ctx.endWeek) endIdx = i; });
-    var startIdx = endIdx - e.value + 1;
+    var s0 = res[Math.max(0, endIdx - e.value + 1)], s1 = res[endIdx];
     B.led = (e.value < 10 ? "0" : "") + e.value; B.unit = "GAMES";
-    if (endIdx >= 0){
-      var s0 = res[startIdx] || res[0], s1 = res[endIdx];
-      B.sub = "WK " + s0.week + (s0.season !== s1.season ? " '" + String(s0.season).slice(2) : "") + " → WK " + s1.week + (s1.season !== cur ? " '" + String(s1.season).slice(2) : "");
-      B.live = endIdx === res.length - 1;
-      var from = Math.max(0, endIdx - 8), to = Math.min(res.length, endIdx + 2);
-      res.slice(from, to).forEach(function(r, j){
-        var i = from + j, inRun = i >= startIdx && i <= endIdx;
-        B.chips.push({t:r.res, c: inRun ? (r.res === "W" ? "run" : "runl") : (r.res === "W" ? "w" : r.res === "L" ? "l" : "")});
-      });
-      if (B.live) B.chips.push({t:"·", c:"next"});
-      B.status = B.live ? "Active" : "Snapped Wk " + res[endIdx + 1].week;
-      B.season = s1.season;
-    }
+    B.live = endIdx >= 0 && endIdx === res.length - 1;
+    function wk(r){ return r ? "Wk " + r.week + (r.season !== cur ? " '" + String(r.season).slice(2) : "") : "—"; }
+    B.cells.push(["Started", wk(s0)]);
+    B.cells.push(["Ended", B.live ? "Active" : wk(res[endIdx + 1])]);
+    second(e2 ? String(e2.value) : "—");
+    B.caption = (win ? "Won " : "Lost ") + e.value + " in a row" + (B.live ? " and counting." : ", snapped in " + wk(res[endIdx + 1]) + ".");
+    B.status = B.live ? "Active" : "Snapped";
+    if (s1) B.season = s1.season;
   } else if (key === "luckiest" || key === "unluckiest"){
-    var n = res.length, luckW = (e.actualPct - e.apPct) * n, deserved = e.apPct * n;
-    B.led = (luckW >= 0 ? "+" : "−") + fmt1(Math.abs(luckW)); B.unit = "WINS";
-    B.sub = recLabel(res) + " actual · " + fmt1(deserved) + "-" + fmt1(n - deserved) + " deserved";
-    var lucky = 0, robbed = 0;
-    res.forEach(function(r){ var m = weekMedian(r.season, r.week); if (r.res === "W" && r.pf < m) lucky++; if (r.res === "L" && r.pf > m) robbed++; });
-    res.slice(-10).forEach(function(r){
-      var m = weekMedian(r.season, r.week);
-      B.chips.push({t:r.res, c: r.res === "W" && r.pf < m ? "luck" : r.res === "L" && r.pf > m ? "unluck" : (r.res === "W" ? "w" : "l")});
-    });
-    B.status = key === "luckiest" ? lucky + " lucky win" + (lucky === 1 ? "" : "s") : robbed + " robbed loss" + (robbed === 1 ? "" : "es");
-    B.statusCls = key === "luckiest" ? "luck" : "unluck";
-    B.season = "All-time";
+    var lucky = key === "luckiest";
+    function luckWins(x, xu){ var n = segResults(xu).length; return (x.actualPct - x.apPct) * n; }
+    var n = res.length, lw = luckWins(e, uid), deserved = e.apPct * n;
+    var cnt = 0;
+    res.forEach(function(r){ var m = weekMedian(r.season, r.week); if (lucky ? (r.res === "W" && r.pf < m) : (r.res === "L" && r.pf > m)) cnt++; });
+    B.led = (lw >= 0 ? "+" : "−") + fmt1(Math.abs(lw)); B.unit = "WINS";
+    B.cells.push(["Actual", recLabel(res)]);
+    B.cells.push(["Deserved", fmt1(deserved) + "-" + fmt1(n - deserved)]);
+    second(e2 ? signed(luckWins(e2, uid2)) : "—");
+    B.caption = fmt1(Math.abs(lw)) + (lw >= 0 ? " more" : " fewer") + " wins than their scoring deserves · " +
+      (lucky ? plural(cnt, "lucky win", "lucky wins") : plural(cnt, "robbed loss", "robbed losses"));
+    B.status = lastWk ? "Thru Wk " + lastWk : "All-time"; B.season = "All-time";
   } else if (key === "mostEfficient"){
-    B.led = fmt0(e.value * 100) + "%"; B.unit = "OPTIMAL"; B.sub = "Points started / best possible";
-    res.filter(function(r){ return r.opt != null && r.opt > 0; }).slice(-10).forEach(function(r){ var pc = Math.round(r.pf / r.opt * 100); B.chips.push({t:String(pc), c:"pct", p:pc}); });
-    B.status = "Weekly lineup %"; B.season = "All-time";
+    var pc = res.filter(function(r){ return r.opt != null && r.opt > 0; }).map(function(r){ return r.pf / r.opt * 100; });
+    B.led = fmt0(e.value * 100) + "%"; B.unit = "OPTIMAL";
+    B.cells.push(["Best week", pc.length ? fmt0(Math.max.apply(null, pc)) + "%" : "—"]);
+    B.cells.push(["Worst week", pc.length ? fmt0(Math.min.apply(null, pc)) + "%" : "—"]);
+    second(e2 ? fmt0(e2.value * 100) + "%" : "—");
+    B.caption = "Started " + fmt0(e.value * 100) + "% of the best lineup they could have set.";
+    B.status = lastWk ? "Thru Wk " + lastWk : "All-time"; B.season = "All-time";
   } else if (key === "bestSeason"){
-    B.led = fmt0(e.value); B.unit = "PTS"; B.sub = e.season + " season";
-    var wk = res.filter(function(r){ return r.season === e.season; });
-    var tops = wk.map(function(r){ return r.pf; }).sort(function(a, b){ return b - a; }).slice(0, 3);
-    wk.slice(-10).forEach(function(r){ B.chips.push({t:fmt0(r.pf), c: tops.indexOf(r.pf) >= 0 ? "hot num" : "w num"}); });
-    B.live = e.season === cur && STATE.currentSeason === STATE.seasons[STATE.seasons.length - 1];
+    var wk2 = res.filter(function(r){ return r.season === e.season; }), pts = wk2.map(function(r){ return r.pf; });
+    B.led = fmt0(e.value); B.unit = "PTS";
+    B.live = e.season === cur;
+    B.cells.push(["Weeks", String(wk2.length)]);
+    B.cells.push(["Avg / wk", pts.length ? fmt1(e.value / pts.length) : "—"]);
+    second(e2 ? fmt0(e2.value) : "—");
+    B.caption = B.live ? "Most points in a regular season, and the " + e.season + " total is still climbing." : "Most points scored in a regular season (" + e.season + ").";
     B.status = B.live ? "Still counting" : "Final"; B.season = e.season;
   } else if (key === "mostWins" || key === "mostLosses"){
-    B.led = String(e.value); B.unit = key === "mostWins" ? "WINS" : "LOSSES"; B.sub = recLabel(res) + " all-time";
-    var bySeason = {};
-    res.forEach(function(r){ (bySeason[r.season] = bySeason[r.season] || []).push(r); });
-    Object.keys(bySeason).sort().slice(-5).forEach(function(sn){ B.chips.push({t:"'" + sn.slice(2) + "|" + recLabel(bySeason[sn]), c: "season" + (sn === cur ? " run" : "")}); });
-    B.live = !!bySeason[cur]; B.status = B.live ? "Active" : "Final"; B.season = "All-time";
+    var w = res.filter(function(r){ return r.res === "W"; }).length, gp = res.length;
+    B.led = String(e.value); B.unit = key === "mostWins" ? "WINS" : "LOSSES";
+    B.live = res.some(function(r){ return r.season === cur; });
+    B.cells.push(["Record", recLabel(res)]);
+    B.cells.push(["Win %", gp ? fmt0(w / gp * 100) + "%" : "—"]);
+    second(e2 ? String(e2.value) : "—");
+    B.caption = "Regular-season " + (key === "mostWins" ? "wins" : "losses") + " across every season tracked.";
+    B.status = B.live ? "Active" : "Final"; B.season = "All-time";
   }
   return B;
 }
@@ -5150,20 +5174,15 @@ function boardCard(item, idx, total){
   if (src){ var img = el("img", {src:src, alt:"", loading:"lazy", draggable:"false"}); img.onerror = function(){ img.replaceWith(el("span", {class:"rc-ini"}, [initials(teamName(u))])); }; av.appendChild(img); }
   else av.appendChild(el("span", {class:"rc-ini"}, [initials(teamName(u))]));
   var len = B.led.length, size = len <= 2 ? 8.6 : len <= 3 ? 7.4 : len <= 4 ? 6.2 : 5;
-  var chips = el("div", {class:"rb-chips"}, B.chips.map(function(c){
-    var parts = c.t.split("|");
-    var node = el("span", {class:c.c || ""}, parts.length > 1 ? [parts[0], el("br"), parts[1]] : [c.t]);
-    if (c.p != null) node.style.setProperty("--p", c.p);
-    return node;
-  }));
   return el("div", {class:"rc-card rb b-" + T.k + (idx === 0 ? " is-no1" : ""), "data-i":String(idx), "aria-hidden":"true"}, [
     el("div", {class:"rc-inner rb-inner"}, [
       el("div", {class:"rb-hd"}, [el("span", {}, ["SFL scoreboard"]), el("span", {}, [String(B.season)])]),
       el("div", {class:"rb-lbl"}, [item.label]),
       el("div", {class:"rb-led"}, [el("b", {style:"font-size:" + size + "em"}, [B.led]), el("small", {}, [B.unit])]),
-      el("div", {class:"rb-who"}, [av, el("div", {}, [el("b", {}, [teamName(u)]), el("small", {}, [B.sub])])]),
-      chips,
-      el("div", {class:"rb-status"}, [el("span", {class:"st " + (B.live ? "live" : "") + (B.statusCls ? " " + B.statusCls : "")}, [B.status]), el("span", {}, [B.second])]),
+      el("div", {class:"rb-who"}, [av, el("b", {}, [teamName(u)])]),
+      el("div", {class:"rb-cells"}, B.cells.map(function(c){ return el("div", {class:"rb-cell"}, [el("span", {}, [c[0]]), el("b", {}, [c[1]])]); })),
+      el("div", {class:"rb-cap"}, [B.caption]),
+      el("div", {class:"rb-status"}, [el("span", {class:"st" + (B.live ? " live" : "")}, [B.status]), el("span", {class:"tier"}, [T.name])]),
       el("div", {class:"rc-shine"})
     ])
   ]);
