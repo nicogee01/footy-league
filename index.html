@@ -75,13 +75,12 @@
   /* =====================================================================
      SITE BACKGROUND — "night" (stadium under the lights) or "framed"
      ===================================================================== */
-  .stadium{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
+  .stadium{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;transform:translateZ(0);will-change:transform;contain:strict;}
   .bg-night .stadium{background:linear-gradient(180deg, #02060b 0%, #06111c 30%, #0a1c29 48%, #0c2a24 62%, #0f3a22 78%, #123f25 100%);}
   .stadium-svg{position:absolute;inset:0;width:100%;height:100%;}
-  .st-beam{mix-blend-mode:screen;animation:beam 7s ease-in-out infinite alternate;}
-  @keyframes beam{from{opacity:1;} to{opacity:.62;}}
+  .st-beam{mix-blend-mode:screen;}
   .flashes{position:absolute;left:0;right:0;top:var(--crowd-top, 50vh);height:var(--crowd-h, 12vh);}
-  .flashes span{position:absolute;border-radius:50%;background:#fff;opacity:0;animation:flash 6s infinite;}
+  .flashes span{position:absolute;border-radius:50%;background:radial-gradient(circle, #fff 0 30%, rgba(255,255,255,.55) 45%, rgba(255,255,255,0) 70%);opacity:0;will-change:opacity;animation:flash 6s infinite;}
   @keyframes flash{0%,92%,100%{opacity:0;} 94%{opacity:.95;}}
   .stadium-dim{position:absolute;inset:0;background:linear-gradient(180deg, rgba(2,6,10,0) 45%, rgba(2,6,10,.42) 100%);}
   /* text that sits directly on the stadium (not inside a card) gets a soft shadow for contrast */
@@ -89,7 +88,7 @@
   .bg-night .analytics-intro,.bg-night .foot-note,.bg-night .section-lede,.bg-night .link-arrow,.bg-night .week-status{
     text-shadow:0 1px 2px rgba(0,0,0,.9), 0 0 14px rgba(0,0,0,.75);
   }
-  @media (prefers-reduced-motion:reduce){ .st-beam,.flashes span,.giant{animation:none !important;} }
+  @media (prefers-reduced-motion:reduce){ .flashes span,.giant{animation:none !important;} }
 
   .bg-framed .stadium{background:
       repeating-linear-gradient(0deg, rgba(238,242,245,.16) 0 3px, transparent 3px 150px),
@@ -729,6 +728,10 @@
     text-shadow:0 0 2px #04080c, 0 1px 3px #04080c, 0 0 10px rgba(4,8,12,.85), 0 0 18px rgba(4,8,12,.6);
   }
   .mu-txt{min-width:0;}
+  @media (max-width:760px), (hover:none){
+    .site-header{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(4,13,20,.96);}
+    .mu-txt.on-fx{-webkit-backdrop-filter:none !important;backdrop-filter:none !important;background:rgba(4,8,12,.78) !important;}
+  }
   .mu-txt.on-fx{background:rgba(4,8,12,.55);padding:5px 11px;border-radius:5px;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);}
 
   /* =====================================================================
@@ -1872,7 +1875,8 @@ function setLoadingMsg(t){ var m = $("#loadingMsg"); if (m) m.textContent = t; }
 async function loadPlayersInfo(){
   var today = new Date().toISOString().slice(0,10);
   try{
-    if (localStorage.getItem("sleeper_players_date") === today){
+    var saved = localStorage.getItem("sleeper_players_date");
+    if (saved && (Date.parse(today) - Date.parse(saved)) / 864e5 < 3){
       var cached = localStorage.getItem("sleeper_players_trim");
       if (cached) return JSON.parse(cached);
     }
@@ -2294,10 +2298,12 @@ function buildFramedBackdrop(host){
 function buildNightStadium(host){
   host.innerHTML = '<div class="stadium-field"></div><div class="flashes"></div><div class="stadium-dim"></div>';
   var flashes = host.querySelector(".flashes");
-  for (var i=0;i<40;i++){
-    var sz = 2 + Math.random()*3.5;
-    flashes.appendChild(el("span", {style:"left:"+(Math.random()*100)+"%;top:"+(Math.random()*100)+"%;width:"+sz+"px;height:"+sz+"px;box-shadow:0 0 "+(sz*4)+"px "+sz+"px rgba(255,255,255,.8);animation-delay:"+(-Math.random()*6)+"s;animation-duration:"+(4+Math.random()*5)+"s"}));
+  var nFlash = window.innerWidth < 760 ? 12 : 30;
+  for (var i=0;i<nFlash;i++){
+    var sz = (2 + Math.random()*3.5) * 3.2;
+    flashes.appendChild(el("span", {style:"left:"+(Math.random()*100)+"%;top:"+(Math.random()*100)+"%;width:"+sz.toFixed(1)+"px;height:"+sz.toFixed(1)+"px;margin:-"+(sz/2).toFixed(1)+"px 0 0 -"+(sz/2).toFixed(1)+"px;animation-delay:"+(-Math.random()*6).toFixed(2)+"s;"}));
   }
+
   var fieldHost = host.querySelector(".stadium-field");
   var lastW = 0, lastH = 0, t = 0;
   function paint(){
@@ -3906,6 +3912,7 @@ var STREAK_FRAG = [
   "}"
 ].join("\n");
 
+var LITE_FX = window.matchMedia("(max-width:760px), (hover:none)").matches;
 var StreakFX = (function(){
   var items = [], raf = 0, t0 = performance.now(), supported = null, io = null;
   var VERT = "attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}";
@@ -3941,7 +3948,8 @@ var StreakFX = (function(){
     var r = it.r, gl = r.gl, cv = it.cv;
     var cr = cv.getBoundingClientRect();
     if (!cr.width || !cr.height) return;
-    var scale = Math.min(window.devicePixelRatio || 1, 1.5) * 0.85;
+    // phones: render the flames at lower resolution (they're soft anyway) to save GPU time
+    var scale = LITE_FX ? 0.6 : Math.min(window.devicePixelRatio || 1, 1.5) * 0.85;
     var W = Math.round(cr.width * scale), H = Math.round(cr.height * scale);
     if (cv.width !== W || cv.height !== H){ cv.width = W; cv.height = H; gl.viewport(0, 0, W, H); }
     var k = W / cr.width, b = it.summary.getBoundingClientRect();
@@ -3955,9 +3963,12 @@ var StreakFX = (function(){
     gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
+  var lastDraw = 0;
   function loop(now){
     raf = 0;
     if (!items.length) return;
+    if (LITE_FX && now - lastDraw < 32){ raf = requestAnimationFrame(loop); return; }   // ~30fps on phones
+    lastDraw = now;
     var t = reducedMotion.matches ? 2 : (now - t0) / 1000;
     items.forEach(function(it){ if (it.visible && !document.hidden && document.body.contains(it.cv)) draw(it, now, t); });
     if (!reducedMotion.matches) raf = requestAnimationFrame(loop);
@@ -5832,16 +5843,13 @@ async function boot(){
       showError("Couldn't find a league with ID " + LEAGUE_ID + ". Double-check the league ID and that it's a public NFL league.");
       return;
     }
+    var playersJob = loadPlayersInfo();   // big download: runs alongside the league requests instead of after them
     STATE.nflState = await fetchJSON(API + "/state/nfl");
     var chain = await loadLeagueChain(LEAGUE_ID);
     if (!chain.length) chain = [league0];
-    var seasons = [];
-    for (var i=0;i<chain.length;i++){
-      setLoadingMsg("Loading the " + chain[i].season + " season (" + (i+1) + "/" + chain.length + ")…");
-      seasons.push(await loadSeason(chain[i], i === chain.length - 1, STATE.nflState));
-    }
-    STATE.seasons = seasons;
-    STATE.playersInfo = await loadPlayersInfo();
+    setLoadingMsg("Loading " + chain.length + " season" + (chain.length > 1 ? "s" : "") + " of league data…");
+    STATE.seasons = await Promise.all(chain.map(function(lg, i){ return loadSeason(lg, i === chain.length - 1, STATE.nflState); }));
+    STATE.playersInfo = await playersJob;
     setLoadingMsg("Crunching the numbers…");
     buildAggregates();
 
