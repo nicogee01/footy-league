@@ -296,12 +296,28 @@
   }
   .ribbon-label b{font-size:26px;font-weight:800;font-style:normal;line-height:.9;}
   .ribbon-label span{font-size:12px;font-weight:700;letter-spacing:.12em;}
-  .ribbon-track{display:flex;overflow-x:auto;scroll-snap-type:x proximity;flex:1;scrollbar-width:thin;scrollbar-color:var(--surface-3) transparent;}
+  .ribbon-track{display:flex;overflow-x:auto;scroll-snap-type:x proximity;flex:1;min-width:0;scrollbar-width:thin;scrollbar-color:var(--surface-3) transparent;}
+  .ribbon-strip{display:flex;flex:0 0 auto;}
+  .ribbon-track.is-ticker{overflow:hidden;scroll-snap-type:none;-webkit-mask:linear-gradient(90deg,#000 92%,transparent);mask:linear-gradient(90deg,#000 92%,transparent);}
+  .ribbon-track.is-ticker .ribbon-strip{animation:ribbonTicker var(--dur,30s) linear infinite;will-change:transform;}
+  .ribbon-track.is-ticker:hover .ribbon-strip,.ribbon-track.is-ticker:focus-within .ribbon-strip{animation-play-state:paused;}
+  @keyframes ribbonTicker{to{transform:translateX(-50%);}}
   .ribbon-item{
     flex:0 0 auto;min-width:230px;display:grid;grid-template-columns:1fr auto;gap:2px 14px;padding:10px 18px;border-right:1px solid rgba(238,242,245,.08);
     scroll-snap-align:start;transition:background-color var(--dur-2);
   }
   .ribbon-item:hover{background:rgba(238,242,245,.05);}
+  .ribbon-item{grid-template-columns:minmax(0,1fr) auto auto;align-items:center;min-width:250px;}
+  .ribbon-item.is-up{grid-template-columns:minmax(0,1fr) auto;}
+  .rb-ml{justify-self:end;font-family:var(--font-display);font-weight:800;font-size:15px;letter-spacing:.02em;font-variant-numeric:tabular-nums;
+    min-width:54px;text-align:center;padding:1px 6px;border-radius:3px;background:rgba(238,242,245,.07);color:var(--chalk-dim);border:1px solid rgba(238,242,245,.1);}
+  .rb-ml.fav{color:var(--chalk);background:rgba(255,106,19,.14);border-color:rgba(255,106,19,.55);}
+  .rb-ml.off{background:none;border-color:transparent;color:var(--chalk-dimmer);}
+  .rb-meta{grid-column:1/-1;display:flex;align-items:center;gap:8px;margin-top:3px;padding-top:4px;border-top:1px dashed rgba(238,242,245,.1);
+    font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--chalk-dim);white-space:nowrap;}
+  .rb-meta .rb-dim{color:var(--chalk-dimmer);}
+  .rb-tag{background:#ffc53d;color:#1f1400;padding:0 5px;border-radius:2px;font-size:10px;letter-spacing:.1em;}
+  .rb-tag.upset{background:var(--flag-solid);color:#fff;}
   .ribbon-team{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;min-width:0;}
   .ribbon-team span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px;}
   .ribbon-team .avatar,.ribbon-team .avatar-fallback{width:22px;height:22px;font-size:9px;border-width:1px;}
@@ -1503,6 +1519,11 @@
     background:repeating-linear-gradient(135deg,#ffc53d 0 14px,#f2b01e 14px 28px);}
   .da-devbar b{font-weight:600;letter-spacing:.18em;text-transform:uppercase;background:#1f1400;color:#ffc53d;padding:2px 8px;border-radius:2px;}
   @media (max-width:760px){ .da-devbar{padding:6px 14px;font-size:11px;gap:6px;} }
+
+  .mu-form{display:inline-block;margin-left:6px;padding:0 5px;border-radius:2px;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;line-height:1.5;
+    background:rgba(238,242,245,.08);color:var(--chalk-dim);vertical-align:1px;white-space:nowrap;cursor:help;}
+  .mu-form.up{background:rgba(95,209,138,.16);color:var(--win);}
+  .mu-form.down{background:rgba(255,138,122,.16);color:var(--flag);}
 </style>
 </head>
 <body>
@@ -2606,29 +2627,8 @@ function renderHome(app){
   var wrap = el("div", {class:"wrap"});
   app.appendChild(wrap);
 
-  // ---- this week ----
-  var muSection = el("section", {class:"section", "aria-labelledby":"hw-title"}, [
-    el("div", {class:"section-head"}, [
-      el("div", {}, [
-        el("span", {class:"eyebrow"}, [(isPlayoffWeek(season.league, week) ? "Playoffs · " : "") + "Week " + week]),
-        el("h2", {id:"hw-title"}, [status === "upcoming" ? "On deck this week" : (status === "live" ? "Game day scoreboard" : "Week " + week + " final")])
-      ]),
-      el("a", {class:"link-arrow", href:"#matchups/" + week}, ["Full box scores", icon("arrowRight")])
-    ])
-  ]);
-  if (games.length){
-    var grid = el("div", {class:"mu-grid"});
-    games.forEach(function(g, i){ grid.appendChild(buildMatchupCard(season, g, i, week, status)); });
-    muSection.appendChild(grid);
-  } else {
-    muSection.appendChild(el("div", {class:"card empty-card"}, [isPlayoffWeek(season.league, week) ? "It's playoff time — check the bracket on the Standings page." : "No matchups posted for this week yet."]));
-  }
-  wrap.appendChild(muSection);
-
-  // ---- table + leaders ----
-  var split = el("div", {class:"home-split"});
-  split.appendChild(buildMiniTable(season));
-  split.appendChild(buildLeaders(season));
+  // ---- standings ----
+  var split = buildMiniTable(season);
   wrap.appendChild(el("section", {class:"section", "aria-labelledby":"tbl-title"}, [
     el("div", {class:"section-head"}, [
       el("div", {}, [el("span", {class:"eyebrow"}, [seasonLabel()]), el("h2", {id:"tbl-title"}, ["The race for the trophy"])]),
@@ -2658,42 +2658,65 @@ function renderHome(app){
   wrap.appendChild(el("section", {class:"section"}, [buildCtaBanner()]));
 }
 
-function buildMatchupCard(season, g, i, week, status){
-  var aWin = status !== "upcoming" && g.a.pts > g.b.pts;
-  var bWin = status !== "upcoming" && g.b.pts > g.a.pts;
-  function row(s, win){
-    return el("div", {class:"mu-row" + (win ? " win" : "")}, [
-      avatarEl(s.u, "sm"),
-      el("div", {class:"meta"}, [el("div", {class:"name"}, [teamName(s.u)]), el("div", {class:"rec"}, [recordOf(season, s.uid)])]),
-      el("div", {class:"pts"}, [status === "upcoming" ? "—" : fmt1(s.pts)])
-    ]);
-  }
-  var card = el("article", {class:"card mu-card clickable"}, [
-    el("div", {class:"mu-card-top"}, [el("span", {}, ["Matchup " + (i+1)]), status === "live" ? el("span", {class:"tag tag-live"}, ["Live"]) : null]),
-    row(g.a, aWin),
-    el("div", {class:"mu-vs", "aria-hidden":"true"}, ["VS"]),
-    row(g.b, bWin)
-  ]);
-  return makeActivatable(card, function(){ go("#matchups/" + week); }, teamName(g.a.u) + " versus " + teamName(g.b.u) + ", open box score");
-}
-
 function buildRibbon(season, week, games, status){
   var track = el("div", {class:"ribbon-track"});
-  games.forEach(function(g){
-    var up = status === "upcoming";
-    function line(s, lead){
-      return [
-        el("div", {class:"ribbon-team"}, [avatarEl(s.u, "sm"), el("span", {}, [teamName(s.u)])]),
-        el("div", {class:"ribbon-score" + (lead ? " lead" : "")}, [up ? "—" : fmt1(s.pts)])
-      ];
+  var strip = el("div", {class:"ribbon-strip"});
+  track.appendChild(strip);
+  var up = status === "upcoming", live = status === "live", fin = status === "final";
+  function fill(lines){
+    strip.innerHTML = "";
+    games.forEach(function(g, gi){
+      var L = lines ? lines[gi] : null;
+      var favA = L ? L.pA >= .5 : false;
+      function line(sd, isA){
+        var ml = L ? (isA ? L.mlA : L.mlB) : null, fav = L && (isA ? favA : !favA);
+        var won = fin && (isA ? g.a.pts > g.b.pts : g.b.pts > g.a.pts);
+        return [
+          el("div", {class:"ribbon-team"}, [avatarEl(sd.u, "sm"), el("span", {}, [teamName(sd.u)])]),
+          el("span", {class:"rb-ml" + (fav ? " fav" : "") + (ml == null ? " off" : "")}, [ml == null ? "—" : fmtML(ml)]),
+          up ? null : el("div", {class:"ribbon-score" + (won || (live && (isA ? g.a.pts > g.b.pts : g.b.pts > g.a.pts)) ? " lead" : "")}, [fmt1(sd.pts)])
+        ];
+      }
+      var meta = null;
+      if (L){
+        var dogML = Math.max(L.mlA, L.mlB), open = L.open;
+        var bits = [];
+        if (fin){
+          var dogWon = (open.pA >= .5 && g.b.pts > g.a.pts) || (open.pA < .5 && g.a.pts > g.b.pts);
+          bits.push(el("span", {}, ["Closed " + spreadText(open, g)]));
+          bits.push(dogWon ? el("b", {class:"rb-tag upset"}, ["Upset"]) : el("span", {class:"rb-dim"}, ["Fav won"]));
+        } else {
+          bits.push(el("span", {}, [(live ? "Live " : "") + spreadText(L, g)]));
+          bits.push(el("span", {class:"rb-dim"}, ["O/U " + hook(L.total).toFixed(1)]));
+          if (dogML >= 200) bits.push(el("b", {class:"rb-tag"}, ["Upset alert"]));
+        }
+        meta = el("div", {class:"rb-meta"}, bits);
+      }
+      var label = teamName(g.a.u) + (L ? " " + fmtML(L.mlA) : "") + " vs " + teamName(g.b.u) + (L ? " " + fmtML(L.mlB) : "") + (up ? "" : ", " + fmt1(g.a.pts) + " to " + fmt1(g.b.pts));
+      strip.appendChild(el("a", {class:"ribbon-item" + (up ? " is-up" : ""), href:"#matchups/" + week, "aria-label":label},
+        line(g.a, true).concat(line(g.b, false), [meta])));
+    });
+    if (!games.length){ strip.appendChild(el("div", {class:"ribbon-item"}, [el("div", {class:"ribbon-team"}, ["Matchups post soon"])])); return; }
+    if (!reducedMotion.matches){
+      // ticker: a second copy of the games follows the first so the loop is seamless
+      [].slice.call(strip.children).forEach(function(n){
+        var c = n.cloneNode(true);
+        c.setAttribute("aria-hidden", "true"); c.setAttribute("tabindex", "-1");
+        strip.appendChild(c);
+      });
+      track.classList.add("is-ticker");
+      strip.style.setProperty("--dur", Math.max(22, games.length * 7) + "s");
     }
-    var item = el("a", {class:"ribbon-item", href:"#matchups/" + week, "aria-label": teamName(g.a.u) + " " + (up ? "vs" : fmt1(g.a.pts) + " to " + fmt1(g.b.pts)) + " " + teamName(g.b.u)},
-      line(g.a, !up && g.a.pts > g.b.pts).concat(line(g.b, !up && g.b.pts > g.a.pts)));
-    track.appendChild(item);
-  });
-  if (!games.length) track.appendChild(el("div", {class:"ribbon-item"}, [el("div", {class:"ribbon-team"}, ["Matchups post soon"])]));
-  return el("div", {class:"ribbon", role:"region", "aria-label":"Week " + week + " scoreboard"}, [
-    el("div", {class:"ribbon-label"}, [el("span", {}, [status === "live" ? "Live" : status === "upcoming" ? "Up next" : "Final"]), el("b", {}, ["WK " + week])]),
+  }
+  fill(null);
+  if (games.length){
+    Promise.all([getProjections(season, week), getFormFactors(season, week)]).then(function(r){
+      if (!r[0] || !document.body.contains(strip)) return;
+      fill(games.map(function(g){ return sflLine(g, status, r[0], r[1]); }));
+    });
+  }
+  return el("div", {class:"ribbon", role:"region", "aria-label":"Week " + week + " scoreboard and lines"}, [
+    el("div", {class:"ribbon-label"}, [el("span", {}, [live ? "Live" : up ? "Up next" : "Final"]), el("b", {}, ["WK " + week])]),
     track
   ]);
 }
@@ -2717,47 +2740,6 @@ function buildMiniTable(season){
   return card;
 }
 
-function buildLeaders(season){
-  var yr = season.league.season;
-  var high = null, blunder = null, blowout = null;
-  Object.keys(STATE.career).forEach(function(uid){
-    STATE.career[uid].results.forEach(function(r){
-      if (r.season !== yr) return;
-      if (!high || r.pf > high.v) high = {v:r.pf, uid:uid, r:r};
-      if (r.opt != null && (!blunder || r.opt - r.pf > blunder.v)) blunder = {v:r.opt - r.pf, uid:uid, r:r};
-      if (r.res === "W" && (!blowout || r.pf - r.pa > blowout.v)) blowout = {v:r.pf - r.pa, uid:uid, r:r};
-    });
-  });
-  var rows = buildSeasonStandingsRows(season);
-  var pfLeader = rows.slice().sort(function(a,b){ return b.pf - a.pf; })[0];
-  var hot = null;
-  Object.keys(STATE.career).forEach(function(uid){
-    var c = STATE.career[uid];
-    if (c.currentStreak && c.currentStreak.type === "W" && (!hot || c.currentStreak.len > hot.len)) hot = {uid:uid, len:c.currentStreak.len};
-  });
-
-  function leader(iconName, label, value, uid, ctx){
-    var u = STATE.users[uid];
-    var card = el("div", {class:"card leader" + (uid ? " clickable" : "")}, [
-      el("div", {class:"leader-label"}, [icon(iconName), label]),
-      el("div", {class:"leader-value"}, [value]),
-      uid ? el("div", {class:"leader-who"}, [avatarEl(u, "sm"), el("span", {}, [teamName(u)])]) : null,
-      ctx ? el("div", {class:"leader-ctx"}, [ctx]) : null
-    ]);
-    return uid ? makeActivatable(card, function(){ go("#team/" + uid); }, label + ": " + teamName(u) + ", " + value) : card;
-  }
-  var box = el("div", {class:"leaders"});
-  if (!high){
-    box.appendChild(el("div", {class:"card empty-card", style:"grid-column:1/-1;"}, ["Leaderboards fill in once Week 1 kicks off."]));
-    return box;
-  }
-  box.appendChild(leader("bolt", "Top score", fmt1(high.v), high.uid, "Week " + high.r.week + " vs " + teamName(STATE.users[high.r.opp])));
-  box.appendChild(leader("football", "Points leader", fmt1(pfLeader.pf), pfLeader.uid, "Total points for, " + yr));
-  box.appendChild(hot && hot.len > 1 ? leader("flame", "Hottest streak", hot.len + " W", hot.uid, "Consecutive wins") :
-    leader("target", "Biggest blowout", "+" + fmt1(blowout ? blowout.v : 0), blowout && blowout.uid, blowout ? "Week " + blowout.r.week + " over " + teamName(STATE.users[blowout.r.opp]) : ""));
-  box.appendChild(leader("bench", "Bench blunder", "-" + fmt1(blunder ? blunder.v : 0), blunder && blunder.uid, blunder ? "Points left on the bench, Week " + blunder.r.week : ""));
-  return box;
-}
 
 
 function buildCtaBanner(){
@@ -3615,7 +3597,7 @@ function renderMatchups(app, arg){
     if (active) bar.scrollLeft = active.offsetLeft - bar.clientWidth/2 + active.clientWidth/2;
   });
 
-  function paint(raw, updatedAt, proj){
+  function paint(raw, updatedAt, proj, form){
     if (!document.body.contains(list)) return;
     var st = weekStatus(season, week, raw);
     var games = pairMatchups(season, raw);
@@ -3635,11 +3617,11 @@ function renderMatchups(app, arg){
       ]));
       return;
     }
-    games.forEach(function(g){ list.appendChild(buildBoxScore(season, week, g, st, openByDefault, proj)); });
-    if (proj) list.appendChild(el("p", {class:"foot-note"}, ["Projections come from Sleeper and are scored with this league's settings. Win chance is an estimate from projected totals (live points plus remaining projections during games)."]));
+    games.forEach(function(g){ list.appendChild(buildBoxScore(season, week, g, st, openByDefault, proj, form)); });
+    if (proj) list.appendChild(el("p", {class:"foot-note"}, ["Projections come from Sleeper and are scored with this league's settings. Win chance and lines come from the SFL sportsbook model: projected starters, adjusted for how each team has scored against its projections over the last 3 weeks, with each team's week-to-week swing as the uncertainty. Lines include a standard ~4.5% vig. Just for fun."]));
   }
   function load(force){
-    Promise.all([getWeekMatchups(season, week, force), getProjections(season, week)]).then(function(r){ paint(r[0], new Date(), r[1]); });
+    Promise.all([getWeekMatchups(season, week, force), getProjections(season, week), getFormFactors(season, week)]).then(function(r){ paint(r[0], new Date(), r[1], r[2]); });
   }
   load(false);
   clearInterval(matchupsRefreshTimer);
@@ -3657,6 +3639,9 @@ function getProjections(season, week){
   var url = "https://api.sleeper.app/projections/nfl/" + season.league.season + "/" + week + "?season_type=regular" +
     ["QB","RB","WR","TE","K","DEF"].map(function(p){ return "&position%5B%5D=" + p; }).join("");
   var scoring = season.league.scoring_settings || {};
+  var past = season !== STATE.currentSeason || week < currentWeek();
+  var lsKey = "sfl_proj_" + season.league.league_id + "_" + week;
+  if (past){ try{ var hit = localStorage.getItem(lsKey); if (hit){ projCache[key] = JSON.parse(hit); return Promise.resolve(projCache[key]); } }catch(e){} }
   return fetchJSON(url).then(function(rows){
     if (!Array.isArray(rows)){ projCache[key] = null; return null; }
     var map = {};
@@ -3667,8 +3652,113 @@ function getProjections(season, week){
       map[r.player_id] = Math.round(pts * 10) / 10;
     });
     projCache[key] = map;
+    if (past){ try{ localStorage.setItem(lsKey, JSON.stringify(map)); }catch(e){} }
     return map;
   });
+}
+
+/* ---------- SFL sportsbook: win odds from projections + recent form ----------
+   expected score = starters' Sleeper projections (league scoring) x a form multiplier
+   form multiplier = how the team scored vs. its own projections over the last 3 weeks (30% weight, capped)
+   uncertainty     = each team's week-to-week scoring swing, shrunk toward the league norm
+   win chance      = normal CDF of expected margin / combined swing; lines carry a standard ~4.5% vig */
+function normCdf(z){
+  var t = 1 / (1 + 0.2316419 * Math.abs(z)), d = 0.3989423 * Math.exp(-z * z / 2);
+  var q = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))));
+  return z > 0 ? 1 - q : q;
+}
+function starterPts(entry, i){
+  var pid = (entry.starters || [])[i];
+  if (entry.starters_points && entry.starters_points[i] != null) return entry.starters_points[i];
+  return entry.players_points && pid ? (entry.players_points[pid] || 0) : 0;
+}
+var formCache = {};
+function getFormFactors(season, week){
+  var key = season.league.season + "-" + week;
+  if (formCache[key]) return formCache[key];
+  var prior = seasonWeeksWithData(season).filter(function(w){ return w < week; }).slice(-3);
+  formCache[key] = Promise.all(prior.map(function(w){ return getProjections(season, w).then(function(pj){ return {w:w, proj:pj}; }); })).then(function(list){
+    var acc = {};
+    list.forEach(function(x){
+      if (!x.proj) return;
+      (season.matchupsByWeek[x.w] || []).forEach(function(e){
+        var uid = season.rosterOwner[e.roster_id];
+        if (!uid) return;
+        var pj = 0, act = 0;
+        (e.starters || []).forEach(function(pid, i){ if (!pid || pid === "0") return; pj += x.proj[pid] || 0; act += starterPts(e, i); });
+        if (pj <= 0) return;
+        var a = acc[uid] = acc[uid] || {pj:0, act:0, n:0};
+        a.pj += pj; a.act += act; a.n++;
+      });
+    });
+    var out = {};
+    Object.keys(acc).forEach(function(uid){
+      var a = acc[uid], ratio = clamp(a.act / a.pj, .8, 1.2), wgt = Math.min(a.n, 3) / 3;
+      out[uid] = {ratio:ratio, n:a.n, mult:1 + .3 * wgt * (ratio - 1)};
+    });
+    return out;
+  }).catch(function(){ return {}; });
+  return formCache[key];
+}
+var leagueSwingCache = null;
+function teamSwing(uid){
+  if (leagueSwingCache == null){
+    var all = [];
+    Object.keys(STATE.career).forEach(function(k){ STATE.career[k].results.forEach(function(r){ all.push(r.pf); }); });
+    var m = all.reduce(function(a, b){ return a + b; }, 0) / (all.length || 1);
+    leagueSwingCache = all.length > 3 ? Math.sqrt(all.reduce(function(a, v){ return a + (v - m) * (v - m); }, 0) / (all.length - 1)) : 25;
+    leagueSwingCache = clamp(leagueSwingCache, 15, 40);
+  }
+  var L = leagueSwingCache, c = STATE.career[uid];
+  var vals = c ? c.results.slice(-17).map(function(r){ return r.pf; }) : [];
+  var n = vals.length, sd = L;
+  if (n > 1){
+    var mu = vals.reduce(function(a, b){ return a + b; }, 0) / n;
+    sd = Math.sqrt(vals.reduce(function(a, v){ return a + (v - mu) * (v - mu); }, 0) / (n - 1));
+  }
+  return Math.sqrt((n * sd * sd + 4 * L * L) / (n + 4));
+}
+function moneyline(p){
+  var imp = clamp(p + .0225, .01, .99);
+  var ml = imp >= .5 ? -100 * imp / (1 - imp) : 100 * (1 - imp) / imp;
+  ml = Math.round(ml / 5) * 5;
+  if (ml > -100 && ml < 100) ml = ml < 0 ? -100 : 100;
+  return clamp(ml, -5000, 5000);
+}
+function fmtML(ml){ return ml > 0 ? "+" + ml : "−" + Math.abs(ml); }
+function hook(x){ return Math.round(x * 2) / 2; }
+function sflLine(g, status, proj, form){
+  if (!proj) return null;
+  var live = status === "live";
+  function side(sd){
+    var f = form && form[sd.uid] ? form[sd.uid].mult : 1, pre = 0, now = 0, rem = 0, any = false;
+    (sd.entry.starters || []).forEach(function(pid, i){
+      if (!pid || pid === "0") return;
+      var pj = (proj[pid] || 0) * f, pts = starterPts(sd.entry, i);
+      if (proj[pid] != null) any = true;
+      pre += pj;
+      if (live && pts !== 0) now += pts; else { now += pj; rem += pj; }
+    });
+    return {pre:pre, now:now, rem:rem, any:any};
+  }
+  var A = side(g.a), B = side(g.b);
+  if (!A.any && !B.any) return null;
+  function build(ea, eb, fa, fb){
+    var sa = teamSwing(g.a.uid), sb = teamSwing(g.b.uid);
+    var sd = Math.sqrt(sa * sa * fa + sb * sb * fb), m = ea - eb;
+    var pA = sd > .5 ? normCdf(m / sd) : (m > 0 ? 1 : m < 0 ? 0 : .5);
+    pA = clamp(pA, .005, .995);
+    return {pA:pA, pB:1 - pA, expA:ea, expB:eb, spread:m, total:ea + eb, mlA:moneyline(pA), mlB:moneyline(1 - pA)};
+  }
+  var open = build(A.pre, B.pre, 1, 1);                                  // pre-game ("closing") line
+  var cur = live ? build(A.now, B.now, A.pre ? A.rem / A.pre : 0, B.pre ? B.rem / B.pre : 0) : open;
+  cur.open = open;
+  return cur;
+}
+function spreadText(line, g){
+  var m = hook(Math.abs(line.spread));
+  if (m < .5) return "PK";
+  return tn(line.spread > 0 ? g.a.uid : g.b.uid) + " −" + m.toFixed(1);
 }
 
 /* Win/loss streak a team carried INTO a given week (so past weeks show the streak as it stood then). */
@@ -4008,7 +4098,7 @@ var StreakFX = (function(){
 })();
 
 var muOpenState = {};
-function buildBoxScore(season, week, g, status, openByDefault, proj){
+function buildBoxScore(season, week, g, status, openByDefault, proj, form){
   var up = status === "upcoming", live = status === "live", fin = status === "final";
   var slots = starterSlots(season.league.roster_positions);
   function ptsAt(entry, i){
@@ -4051,6 +4141,14 @@ function buildBoxScore(season, week, g, status, openByDefault, proj){
       el("span", {}, [" vs pre-game " + fmt1(pre)])
     ]);
   }
+  // small "form" hint: the adjustment the odds model applies from the last 3 weeks vs. projections
+  function formTag(uid){
+    var f = form && form[uid];
+    if (!f || !proj || fin) return null;
+    var pct = Math.round((f.mult - 1) * 100);
+    var tip = "Scored " + Math.round(f.ratio * 100) + "% of projections over the last " + f.n + " week" + (f.n > 1 ? "s" : "") + "; the odds adjust this team's projection " + (pct >= 0 ? "+" : "") + pct + "%";
+    return el("span", {class:"mu-form " + (pct > 0 ? "up" : pct < 0 ? "down" : ""), title:tip}, ["Form " + (pct > 0 ? "+" : pct < 0 ? "−" : "±") + Math.abs(pct) + "%"]);
+  }
   var aWin = !up && g.a.pts > g.b.pts, bWin = !up && g.b.pts > g.a.pts;
 
   // top scorer across both lineups
@@ -4070,7 +4168,7 @@ function buildBoxScore(season, week, g, status, openByDefault, proj){
       streakAvatar(s.u, isA ? skA : skB),
       el("div", {class:"mu-txt" + (fx.lvl >= 3 ? " on-fx" : "")}, [
         el("div", {class:"nm"}, [teamName(s.u)]),
-        el("div", {class:"rc"}, [recordOf(season, s.uid) + " · @" + (s.u ? s.u.display_name : "")]),
+        el("div", {class:"rc"}, [recordOf(season, s.uid) + " · @" + (s.u ? s.u.display_name : ""), formTag(s.uid)]),
         projLine(s, isA ? preA : preB, isA ? pa : pb, right)
       ])
     ]);
@@ -4090,13 +4188,13 @@ function buildBoxScore(season, week, g, status, openByDefault, proj){
     // final: each team's share of the points scored; otherwise: estimated win chance from projected totals
     var pA;
     if (fin) pA = (g.a.pts + g.b.pts) > 0 ? g.a.pts / (g.a.pts + g.b.pts) : 0.5;
-    else pA = 1 / (1 + Math.exp(-(pa - pb) / 11));
+    else { var line = sflLine(g, status, proj, form); pA = line ? line.pA : 1 / (1 + Math.exp(-(pa - pb) / 11)); }
     pA = clamp(pA, 0, 1);
     var pctA = Math.round(pA * 100), pctB = 100 - pctA;
     // yellow always marks whoever is winning / favored, matching the rest of the site
     var aLead = pA >= 0.5, bLead = pA <= 0.5;
     var cap = fin ? ("Final margin " + fmt1(Math.abs(g.a.pts - g.b.pts)) + (pa != null ? " · projected " + fmt1(pa) + "–" + fmt1(pb) : ""))
-                  : ((live ? "Live win chance" : "Win chance") + " · projected " + fmt1(pa) + "–" + fmt1(pb));
+                  : ((live ? "Live win chance" : "Win chance") + " · projected " + fmt1(pa) + "–" + fmt1(pb) + (line ? " · " + fmtML(line.mlA) + " / " + fmtML(line.mlB) + " · " + spreadText(line, g) + " · O/U " + hook(line.total).toFixed(1) : ""));
     var aria = fin ? (teamName(g.a.u) + " scored " + pctA + "% of the points") : (teamName(g.a.u) + " " + pctA + "% to win, " + teamName(g.b.u) + " " + pctB + "%");
     meter = el("div", {class:"mu-meter"}, [
       el("span", {class:"mu-pct a" + (aLead ? " lead" : "")}, [fin ? (aWin ? "W" : g.a.pts === g.b.pts ? "T" : "L") : pctA + "%"]),
