@@ -1762,6 +1762,68 @@
     .da-spot-x{top:12px;right:12px;}
     .da-spot-frame .da-prod-h,.da-spot-frame .da-prod{grid-template-columns:minmax(0,1fr) auto 34px;}
   }
+
+  /* ---------- Streaks & Seasons pack + scoreboard cards ---------- */
+  .bp.grind{--c1:#2a3440;--c2:#10161d;--c3:#0c2a3a;--glow:rgba(79,209,255,.45);--acc:#4fd1ff;--acc-ink:#04202c;--setA:#ffffff;--setB:#a9e6ff;--setC:#4fd1ff;}
+  .bp.grind .bp-logo{color:#dfe8ef;text-shadow:.045em .045em 0 #0c2a3a,-.045em .045em 0 #0c2a3a,.045em -.045em 0 #0c2a3a,-.045em -.045em 0 #0c2a3a,0 .07em 0 #0c2a3a,0 .13em 0 #061822,0 .2em .2em rgba(0,0,0,.5);}
+  .bp.grind .bp-tag{background:#0f6e8c;}
+  .bp.grind .bp-body::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 1px,transparent 1px 7px);pointer-events:none;}
+  .bp-art-svg.grind{width:70%;filter:drop-shadow(0 0 .6em rgba(79,209,255,.5)) drop-shadow(0 .3em .4em rgba(0,0,0,.6));}
+  .bp-set b:first-child{font-size:1.55em;white-space:nowrap;}
+  .rp-row{gap:36px;}
+  @media (max-width:640px){
+    .rp-row{gap:10px;}
+    .bp{font-size:8.2px;}
+    .bp-cta{font-size:11px;padding:5px 8px;}
+    .rp-row.compact .bp{font-size:5.6px;}
+    .rp-row.compact .bp-cta{font-size:10px;padding:3px 7px;}
+  }
+  .rc-card.rb{--bulb:#ffb224;--bulbGlow:rgba(255,120,0,.5);}
+  .rc-card.rb.b-white{--bulb:#f4efe0;--bulbGlow:rgba(255,245,210,.45);}
+  .rc-card.rb.b-amber{--bulb:#ffb224;--bulbGlow:rgba(255,120,0,.5);}
+  .rc-card.rb.b-green{--bulb:#5fd18a;--bulbGlow:rgba(40,220,120,.5);}
+  .rc-card.rb.b-red{--bulb:#ff5040;--bulbGlow:rgba(255,40,20,.6);}
+  .rb-inner{font-size:10px;background:#0a0d10 !important;border:3px solid #2a3139 !important;box-shadow:inset 0 0 0 .6em #14191e, 0 30px 50px -22px rgba(0,0,0,.85);}
+  .rc-card.rb.is-active .rb-inner{box-shadow:inset 0 0 0 .6em #14191e, 0 0 0 2px var(--bulb), 0 34px 60px -22px rgba(0,0,0,.9), 0 0 46px -8px var(--bulbGlow) !important;}
+  .rb-hd{position:absolute;top:1.4em;left:1.5em;right:1.5em;display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:.95em;letter-spacing:.18em;color:#95a4b3;text-transform:uppercase;}
+  .rb-lbl{position:absolute;top:3.1em;left:1.2em;right:1.2em;height:3.4em;display:flex;align-items:center;justify-content:center;text-align:center;font-family:var(--font-display);font-weight:900;font-size:1em;letter-spacing:.05em;text-transform:uppercase;line-height:1;}
+  .rb-lbl{font-size:1.7em;height:2.1em;top:1.85em;}
+  .rb-led{position:absolute;top:7em;left:50%;transform:translateX(-50%);width:19.6em;height:10.4em;border-radius:.6em;border:2px solid #1d2329;display:grid;place-items:center;
+    background:#050607 radial-gradient(circle,rgba(255,255,255,.035) 1px,transparent 1.5px) 0 0/6px 6px;}
+  .rb-led b{font-family:'IBM Plex Mono',monospace;font-weight:600;line-height:1;color:var(--bulb);letter-spacing:-.04em;text-shadow:0 0 .1em var(--bulb),0 0 .28em var(--bulbGlow);white-space:nowrap;}
+  .rb-led small{position:absolute;right:1.2em;bottom:.8em;font-family:'IBM Plex Mono',monospace;font-size:1.05em;color:var(--bulb);opacity:.85;letter-spacing:.08em;}
+  .rb-who{position:absolute;top:18.6em;left:1.6em;right:1.6em;display:flex;align-items:center;gap:1em;min-width:0;}
+  .rb-av{width:3.4em;height:3.4em;border-radius:50%;overflow:hidden;flex-shrink:0;background:#1b2735;display:grid;place-items:center;}
+  .rb-av img{width:100%;height:100%;object-fit:cover;pointer-events:none;}
+  .rb-av .rc-ini{font-size:1.6em;}
+  .rb-who > div{min-width:0;}
+  .rb-who b{display:block;font-size:1.5em;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .rb-who small{display:block;font-family:'IBM Plex Mono',monospace;font-size:1em;color:#95a4b3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.02em;}
+  .rb-chips{position:absolute;left:1.6em;right:1.6em;top:23.2em;display:flex;flex-wrap:wrap;gap:.4em;}
+  .rb-chips span{min-width:2.4em;height:2.4em;padding:0 .3em;display:grid;place-items:center;border-radius:.3em;font-family:var(--font-display);font-weight:900;font-size:1.3em;background:#1a2027;color:#6c7a88;line-height:1;}
+  .rb-chips span.w{background:rgba(95,209,138,.16);color:#5fd18a;box-shadow:inset 0 0 0 1px rgba(95,209,138,.5);}
+  .rb-chips span.l{background:rgba(255,138,122,.13);color:#ff8a7a;}
+  .rb-chips span.run{background:#5fd18a;color:#062a14;box-shadow:0 0 .8em rgba(95,209,138,.6);}
+  .rb-chips span.runl{background:#ff5a4a;color:#2a0500;box-shadow:0 0 .8em rgba(255,90,74,.6);}
+  .rb-chips span.luck{background:#ffc53d;color:#2a1a00;box-shadow:0 0 .8em rgba(255,197,61,.6);}
+  .rb-chips span.unluck{background:#6cc8ff;color:#04203a;box-shadow:0 0 .8em rgba(108,200,255,.6);}
+  .rb-chips span.next{background:transparent;box-shadow:inset 0 0 0 1px #2a3139;color:#6c7a88;}
+  .rb-chips span.pct{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:1em;color:#062a14;background:hsl(calc((var(--p) - 70) * 4), 62%, 58%);}
+  .rb-chips span.num{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:1em;}
+  .rb-chips span.hot{background:var(--bulb);color:#150d00;box-shadow:0 0 .8em var(--bulbGlow);}
+  .rb-chips span.season{height:auto;padding:.35em .6em;font-size:1em;line-height:1.1;text-align:center;font-family:'IBM Plex Mono',monospace;font-weight:600;}
+  .rb-status{position:absolute;left:1.6em;right:1.6em;bottom:1.5em;display:flex;justify-content:space-between;gap:1em;font-family:'IBM Plex Mono',monospace;font-size:1em;letter-spacing:.08em;text-transform:uppercase;color:#95a4b3;}
+  .rb-status .st.live{color:#5fd18a;}
+  .rb-status .st.live::before{content:"● ";animation:rbBlink 1.4s infinite;}
+  .rb-status .st.luck{color:#ffc53d;} .rb-status .st.unluck{color:#6cc8ff;}
+  @keyframes rbBlink{50%{opacity:.3;}}
+  .rc-card.rb .rc-shine{mix-blend-mode:screen;background:linear-gradient(115deg, transparent 38%, rgba(255,255,255,.07) 48%, rgba(255,255,255,.03) 54%, transparent 62%);background-size:260% 100%;}
+  .rb-status span{white-space:nowrap;}
+  .rb-status span:last-child{overflow:hidden;text-overflow:ellipsis;}
+  @media (max-width:640px){ .rb-inner{font-size:7.84px;} }
+  .rl-chip.b-white::before{background:#f4efe0;} .rl-chip.b-amber::before{background:#ffb224;box-shadow:0 0 6px rgba(255,178,36,.8);}
+  .rl-chip.b-green::before{background:#5fd18a;box-shadow:0 0 6px rgba(95,209,138,.8);} .rl-chip.b-red::before{background:#ff5040;box-shadow:0 0 6px rgba(255,80,64,.9);}
+  @media (prefers-reduced-motion:reduce){ .rb-status .st.live::before{animation:none;} }
 </style>
 </head>
 <body>
@@ -4686,7 +4748,7 @@ function computeSegmentRecords(segment, cutoff){
   return R;
 }
 
-var recordsSegment = "regular";
+var recordsSegment = "single";   // "single" (single-game edition) · "grind" (streaks & seasons) · "post"
 function tn(uid){ return teamName(STATE.users[uid]); }
 var RECORD_FORMATTERS = {
   highGame: function(e){ return {uids:[e.uid], value:fmt1(e.value), name:tn(e.uid), ctx:"Week "+e.week+", "+e.season+" vs "+tn(e.opp)}; },
@@ -4745,6 +4807,7 @@ function bigAvatarSrc(user){
   return user.avatar ? CDN + "/avatars/" + user.avatar : null;
 }
 function recordCard(item, idx, total){
+  if (item.board) return boardCard(item, idx, total);
   var f = item.f;
   var photo = el("div", {class:"rc-photo" + (f.uids.length > 1 ? " duo" : "")});
   f.uids.slice(0, 2).forEach(function(uid){
@@ -4865,7 +4928,10 @@ function buildRecordCarousel(items, deal, origin){
     function row(k, v){ return el("div", {class:"rc-row"}, [el("span", {}, [k]), el("b", {}, v)]); }
     info.appendChild(row("Holder", [f.uids.map(function(uid){ return teamName(STATE.users[uid]); }).join(" & ")]));
     info.appendChild(row("Record", [f.value]));
-    info.appendChild(row("Rarity", [el("span", {class:"rl-chip t-" + it.tier.k}, [it.tier.name]), " ", it.reign <= 1 ? "new" : it.reign + " wks"]));
+    if (it.board){
+      info.appendChild(row("Rarity", [el("span", {class:"rl-chip b-" + it.btier.k}, [it.btier.name])]));
+      info.appendChild(row("Status", [it.board.status]));
+    } else info.appendChild(row("Rarity", [el("span", {class:"rl-chip t-" + it.tier.k}, [it.tier.name]), " ", it.reign <= 1 ? "new" : it.reign + " wks"]));
     if (f.ctx) info.appendChild(row("Details", [f.ctx]));
     if (it.arr.length > 1){
       var list = el("div", {class:"rc-top"});
@@ -4993,6 +5059,124 @@ function buildRecordCarousel(items, deal, origin){
   return root;
 }
 
+/* ---------- Streaks & Seasons: scoreboard cards ---------- */
+var BULB_TIERS = [
+  {k:"red", name:"Untouchable", min:.6, desc:"far ahead of #2"},
+  {k:"green", name:"Big lead", min:.35, desc:"well clear of #2"},
+  {k:"amber", name:"Clear lead", min:.15, desc:"ahead of #2"},
+  {k:"white", name:"Contested", min:0, desc:"#2 is right there"}
+];
+// how far the holder is ahead of 2nd place, relative to the spread of the top 5
+function recordDominance(arr){
+  if (!arr || arr.length < 2) return BULB_TIERS[2];
+  var v1 = arr[0].value, v2 = arr[1].value, vl = arr[arr.length - 1].value;
+  var spread = Math.abs(v1 - vl), gap = spread > 1e-9 ? Math.abs(v1 - v2) / spread : 0;
+  for (var i = 0; i < BULB_TIERS.length; i++) if (gap >= BULB_TIERS[i].min) return BULB_TIERS[i];
+  return BULB_TIERS[3];
+}
+function segResults(uid){
+  var pw = getPlayoffWeekStartMap(), c = STATE.career[uid];
+  return c ? c.results.filter(function(r){ var st = pw[r.season]; return !(st != null && r.week >= st); }) : [];
+}
+var weekMedianCache = {};
+function weekMedian(season, week){
+  var k = season + "-" + week;
+  if (weekMedianCache[k] != null) return weekMedianCache[k];
+  var pts = [];
+  Object.keys(STATE.career).forEach(function(uid){ STATE.career[uid].results.forEach(function(r){ if (r.season === season && r.week === week) pts.push(r.pf); }); });
+  pts.sort(function(a, b){ return a - b; });
+  var m = pts.length ? (pts.length % 2 ? pts[(pts.length - 1) / 2] : (pts[pts.length / 2 - 1] + pts[pts.length / 2]) / 2) : 0;
+  return (weekMedianCache[k] = m);
+}
+function recLabel(r){ var w = 0, l = 0, t = 0; r.forEach(function(x){ if (x.res === "W") w++; else if (x.res === "L") l++; else t++; }); return w + "-" + l + (t ? "-" + t : ""); }
+function boardFor(key, arr, seg){
+  var e = arr[0], f = RECORD_FORMATTERS[key](e, seg), uid = f.uids[0], res = segResults(uid);
+  var cur = STATE.currentSeason.league.season;
+  var B = {uid:uid, led:"", unit:"", sub:"", chips:[], status:"", live:false, season:cur, second: arr[1] ? "#2 · " + RECORD_FORMATTERS[key](arr[1], seg).value : "No challenger"};
+  if (key === "winStreak" || key === "lossStreak"){
+    var endIdx = -1;
+    res.forEach(function(r, i){ if (r.season === e.ctx.endSeason && r.week === e.ctx.endWeek) endIdx = i; });
+    var startIdx = endIdx - e.value + 1;
+    B.led = (e.value < 10 ? "0" : "") + e.value; B.unit = "GAMES";
+    if (endIdx >= 0){
+      var s0 = res[startIdx] || res[0], s1 = res[endIdx];
+      B.sub = "WK " + s0.week + (s0.season !== s1.season ? " '" + String(s0.season).slice(2) : "") + " → WK " + s1.week + (s1.season !== cur ? " '" + String(s1.season).slice(2) : "");
+      B.live = endIdx === res.length - 1;
+      var from = Math.max(0, endIdx - 8), to = Math.min(res.length, endIdx + 2);
+      res.slice(from, to).forEach(function(r, j){
+        var i = from + j, inRun = i >= startIdx && i <= endIdx;
+        B.chips.push({t:r.res, c: inRun ? (r.res === "W" ? "run" : "runl") : (r.res === "W" ? "w" : r.res === "L" ? "l" : "")});
+      });
+      if (B.live) B.chips.push({t:"·", c:"next"});
+      B.status = B.live ? "Active" : "Snapped Wk " + res[endIdx + 1].week;
+      B.season = s1.season;
+    }
+  } else if (key === "luckiest" || key === "unluckiest"){
+    var n = res.length, luckW = (e.actualPct - e.apPct) * n, deserved = e.apPct * n;
+    B.led = (luckW >= 0 ? "+" : "−") + fmt1(Math.abs(luckW)); B.unit = "WINS";
+    B.sub = recLabel(res) + " actual · " + fmt1(deserved) + "-" + fmt1(n - deserved) + " deserved";
+    var lucky = 0, robbed = 0;
+    res.forEach(function(r){ var m = weekMedian(r.season, r.week); if (r.res === "W" && r.pf < m) lucky++; if (r.res === "L" && r.pf > m) robbed++; });
+    res.slice(-10).forEach(function(r){
+      var m = weekMedian(r.season, r.week);
+      B.chips.push({t:r.res, c: r.res === "W" && r.pf < m ? "luck" : r.res === "L" && r.pf > m ? "unluck" : (r.res === "W" ? "w" : "l")});
+    });
+    B.status = key === "luckiest" ? lucky + " lucky win" + (lucky === 1 ? "" : "s") : robbed + " robbed loss" + (robbed === 1 ? "" : "es");
+    B.statusCls = key === "luckiest" ? "luck" : "unluck";
+    B.season = "All-time";
+  } else if (key === "mostEfficient"){
+    B.led = fmt0(e.value * 100) + "%"; B.unit = "OPTIMAL"; B.sub = "Points started / best possible";
+    res.filter(function(r){ return r.opt != null && r.opt > 0; }).slice(-10).forEach(function(r){ var pc = Math.round(r.pf / r.opt * 100); B.chips.push({t:String(pc), c:"pct", p:pc}); });
+    B.status = "Weekly lineup %"; B.season = "All-time";
+  } else if (key === "bestSeason"){
+    B.led = fmt0(e.value); B.unit = "PTS"; B.sub = e.season + " season";
+    var wk = res.filter(function(r){ return r.season === e.season; });
+    var tops = wk.map(function(r){ return r.pf; }).sort(function(a, b){ return b - a; }).slice(0, 3);
+    wk.slice(-10).forEach(function(r){ B.chips.push({t:fmt0(r.pf), c: tops.indexOf(r.pf) >= 0 ? "hot num" : "w num"}); });
+    B.live = e.season === cur && STATE.currentSeason === STATE.seasons[STATE.seasons.length - 1];
+    B.status = B.live ? "Still counting" : "Final"; B.season = e.season;
+  } else if (key === "mostWins" || key === "mostLosses"){
+    B.led = String(e.value); B.unit = key === "mostWins" ? "WINS" : "LOSSES"; B.sub = recLabel(res) + " all-time";
+    var bySeason = {};
+    res.forEach(function(r){ (bySeason[r.season] = bySeason[r.season] || []).push(r); });
+    Object.keys(bySeason).sort().slice(-5).forEach(function(sn){ B.chips.push({t:"'" + sn.slice(2) + "|" + recLabel(bySeason[sn]), c: "season" + (sn === cur ? " run" : "")}); });
+    B.live = !!bySeason[cur]; B.status = B.live ? "Active" : "Final"; B.season = "All-time";
+  }
+  return B;
+}
+function boardCard(item, idx, total){
+  var B = item.board, T = item.btier, u = STATE.users[B.uid], src = bigAvatarSrc(u);
+  var av = el("span", {class:"rb-av"});
+  if (src){ var img = el("img", {src:src, alt:"", loading:"lazy", draggable:"false"}); img.onerror = function(){ img.replaceWith(el("span", {class:"rc-ini"}, [initials(teamName(u))])); }; av.appendChild(img); }
+  else av.appendChild(el("span", {class:"rc-ini"}, [initials(teamName(u))]));
+  var len = B.led.length, size = len <= 2 ? 8.6 : len <= 3 ? 7.4 : len <= 4 ? 6.2 : 5;
+  var chips = el("div", {class:"rb-chips"}, B.chips.map(function(c){
+    var parts = c.t.split("|");
+    var node = el("span", {class:c.c || ""}, parts.length > 1 ? [parts[0], el("br"), parts[1]] : [c.t]);
+    if (c.p != null) node.style.setProperty("--p", c.p);
+    return node;
+  }));
+  return el("div", {class:"rc-card rb b-" + T.k + (idx === 0 ? " is-no1" : ""), "data-i":String(idx), "aria-hidden":"true"}, [
+    el("div", {class:"rc-inner rb-inner"}, [
+      el("div", {class:"rb-hd"}, [el("span", {}, ["SFL scoreboard"]), el("span", {}, [String(B.season)])]),
+      el("div", {class:"rb-lbl"}, [item.label]),
+      el("div", {class:"rb-led"}, [el("b", {style:"font-size:" + size + "em"}, [B.led]), el("small", {}, [B.unit])]),
+      el("div", {class:"rb-who"}, [av, el("div", {}, [el("b", {}, [teamName(u)]), el("small", {}, [B.sub])])]),
+      chips,
+      el("div", {class:"rb-status"}, [el("span", {class:"st " + (B.live ? "live" : "") + (B.statusCls ? " " + B.statusCls : "")}, [B.status]), el("span", {}, [B.second])]),
+      el("div", {class:"rc-shine"})
+    ])
+  ]);
+}
+function tierLegend(seg){
+  if (seg === "grind") return el("div", {class:"rc-legend", "aria-label":"Card rarity"}, BULB_TIERS.slice().reverse().map(function(b){ return el("span", {class:"rl-chip b-" + b.k}, [b.name, el("small", {}, [b.desc])]); }));
+  return el("div", {class:"rc-legend", "aria-label":"Card rarity"}, RECORD_TIERS.slice().reverse().map(function(t){ return el("span", {class:"rl-chip t-" + t.k}, [t.name, el("small", {}, [t.desc])]); }));
+}
+function recordsFootText(seg){
+  return (seg === "grind" ? "Scoreboard bulb colour shows how far the record holder is ahead of 2nd place. " : "Rarity is how many weeks in a row the record has stood. ") +
+    "Drag, swipe or use the arrow keys to flip through the cards; tap the front card to open that team.";
+}
+
 function recordItems(R, seg){
   var items = [];
   var reigns = recordReigns(seg, R);
@@ -5008,7 +5192,12 @@ function recordItems(R, seg){
   return items;
 }
 /* A foil booster pack. Clicking it rips the top off and deals its cards into the carousel. */
-function packArt(isPost){
+function packArt(seg){
+  var isPost = seg === "post";
+  if (seg === "grind") return '<svg class="bp-art-svg grind" viewBox="0 0 120 110" aria-hidden="true"><defs><linearGradient id="bpFl" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#4fd1ff"/><stop offset="1" stop-color="#e6f7ff"/></linearGradient></defs>' +
+    '<rect x="14" y="30" width="92" height="70" rx="8" fill="#0c2a3a" stroke="#a9e6ff" stroke-width="3"/><rect x="14" y="30" width="92" height="18" rx="8" fill="#4fd1ff"/>' +
+    '<g fill="#a9e6ff"><rect x="26" y="56" width="14" height="12" rx="2"/><rect x="46" y="56" width="14" height="12" rx="2"/><rect x="66" y="56" width="14" height="12" rx="2"/><rect x="86" y="56" width="10" height="12" rx="2" opacity=".35"/><rect x="26" y="74" width="14" height="12" rx="2"/><rect x="46" y="74" width="14" height="12" rx="2"/><rect x="66" y="74" width="14" height="12" rx="2" opacity=".35"/></g>' +
+    '<path d="M60 4c8 10 14 16 14 26a14 14 0 0 1-28 0c0-6 3-9 6-13 1 5 3 7 5 7 0-7 1-13 3-20z" fill="url(#bpFl)" stroke="#0c2a3a" stroke-width="2"/></svg>';
   if (isPost) return '<svg class="bp-art-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS.trophy + '</svg>';
   return '<svg class="bp-art-svg" viewBox="0 0 200 130" aria-hidden="true"><defs><linearGradient id="bpBallG" x1="0" y1="0" x2="0" y2="1">' +
     '<stop offset="0" stop-color="#c06a30"/><stop offset=".55" stop-color="#7a3514"/><stop offset="1" stop-color="#4a1f0b"/></linearGradient></defs>' +
@@ -5023,6 +5212,8 @@ function recordPack(seg, count, active, compact){
   var isPost = seg === "post";
   var empty = count === 0;
   var pws = (lg.settings || {}).playoff_week_start || 15;
+  var SET = {single:["Single Game", "Edition"], grind:["Streaks &amp;", "Seasons"], post:["Post", "Season"]}[seg];
+  var NAME = {single:"Single Game Edition", grind:"Streaks and Seasons", post:"Postseason"}[seg];
   var cta = empty ? "Sealed until Week " + (isPost ? pws : 1)
                   : active ? "Opened · " + count + " cards" : (compact ? "Open" : "Rip it open");
   var shake = el("span", {class:"bp-shake"});
@@ -5031,16 +5222,16 @@ function recordPack(seg, count, active, compact){
     '<span class="bp-body"><span class="bp-rays"></span>' +
       '<span class="bp-logo"><b>Sunday</b><b>Footy</b></span>' +
       '<span class="bp-tag">Hall of Records</span>' +
-      '<span class="bp-art">' + packArt(isPost) + '</span>' +
-      '<span class="bp-set"><b>' + (isPost ? "Post" : "Regular") + '</b><b>Season</b></span>' +
+      '<span class="bp-art">' + packArt(seg) + '</span>' +
+      '<span class="bp-set"><b>' + SET[0] + '</b><b>' + SET[1] + '</b></span>' +
       '<span class="bp-foot"><span class="bp-ed">' + lg.season + ' Edition</span><span class="bp-count">' + (empty ? "Sealed" : count + " cards") + '</span></span>' +
       '<span class="bp-sheen"></span></span>' +
     '<span class="bp-top"><span class="bp-top-txt">Tear here</span><span class="bp-sheen"></span></span>' +
     '<span class="bp-burst"></span>';
   var pack = el("span", {class:"bp-pack", "aria-hidden":"true"}, [shake, empty ? el("span", {class:"bp-lock"}, ["Sealed", el("br"), "until Wk " + pws]) : null]);
-  var btn = el("button", {type:"button", class:"bp" + (isPost ? " post" : "") + (active ? " is-open" : ""),
+  var btn = el("button", {type:"button", class:"bp " + seg + (active ? " is-open" : ""),
     "aria-pressed": String(active), disabled: empty ? "disabled" : null,
-    "aria-label": (isPost ? "Postseason" : "Regular season") + " records pack, " + lg.season + " edition, " + (empty ? "sealed until week " + pws : count + " cards") + (active ? ", opened" : "")}, [
+    "aria-label": NAME + " records pack, " + lg.season + " edition, " + (empty ? "sealed until week " + pws : count + " cards") + (active ? ", opened" : "")}, [
     pack,
     el("span", {class:"bp-cta"}, [cta, !empty && !active ? icon("arrowRight") : null])
   ]);
@@ -5088,7 +5279,7 @@ function collapseOut(node){
 }
 function openPackInPlace(seg, btn){
   var ctx = recordsCtx;
-  var items = seg === "post" ? ctx.postItems : ctx.regItems;
+  var items = ctx.items[seg];
   recordsSegment = seg; recordsCardIndex = 0; recordsOpened = true; recordsDeal = false;
   var wasCompact = ctx.row.classList.contains("compact");
   ctx.row.classList.add("compact");
@@ -5104,10 +5295,13 @@ function openPackInPlace(seg, btn){
   if (old){ if (old._destroy) old._destroy(); old.replaceWith(car); }
   else ctx.row.insertAdjacentElement("afterend", car);
   ctx.carousel = car;
+  var legend = tierLegend(seg);
+  if (ctx.legend) ctx.legend.replaceWith(legend); else car.insertAdjacentElement("afterend", legend);
+  ctx.legend = legend;
   if (!ctx.foot){
-    ctx.foot = el("p", {class:"foot-note rc-hint rc-pre"}, ["Rarity is how many weeks in a row the record has stood. Drag, swipe or use the arrow keys to flip through the cards; tap the front card to open that team."]);
+    ctx.foot = el("p", {class:"foot-note rc-hint rc-pre"}, [recordsFootText(seg)]);
     ctx.wrap.appendChild(ctx.foot);
-  }
+  } else ctx.foot.textContent = recordsFootText(seg);
   var header = document.querySelector(".site-header");
   var top = ctx.row.getBoundingClientRect().top + window.scrollY - (header ? header.offsetHeight : 0) - 12;
   if (Math.abs(window.scrollY - top) > 40) window.scrollTo({top:top, behavior:"smooth"});
@@ -5121,35 +5315,34 @@ function renderRecords(app){
   app.appendChild(pageHero("All-time", "Hall of Records", "The highs, the lows and the lineup blunders nobody will let you forget."));
   var wrap = el("div", {class:"wrap page-body"});
   app.appendChild(wrap);
-  var regItems = recordItems(computeSegmentRecords("regular"), "regular");
-  var postItems = recordItems(computeSegmentRecords("post"), "post");
-  if (!regItems.length && !postItems.length){
+  var R = computeSegmentRecords("regular");
+  var regItems = recordItems(R, "regular");
+  var singleKeys = RECORD_GROUPS[0].keys.map(function(k){ return k.key; });
+  var items = {
+    single: regItems.filter(function(it){ return singleKeys.indexOf(it.key) >= 0; }),
+    grind: regItems.filter(function(it){ return singleKeys.indexOf(it.key) < 0; }).map(function(it){ it.board = boardFor(it.key, it.arr, "regular"); it.btier = recordDominance(it.arr); return it; }),
+    post: recordItems(computeSegmentRecords("post"), "post")
+  };
+  if (!items.single.length && !items.grind.length && !items.post.length){
     wrap.appendChild(el("div", {class:"card empty-card"}, ["No games have been played yet. The packs unlock after Week 1."]));
     return;
   }
-  var opened = recordsOpened && (recordsSegment === "post" ? postItems.length : regItems.length);
-  var packs = [
-    recordPack("regular", regItems.length, opened && recordsSegment === "regular", opened),
-    recordPack("post", postItems.length, opened && recordsSegment === "post", opened)
-  ];
+  if (!items[recordsSegment]) recordsSegment = "single";
+  var opened = recordsOpened && items[recordsSegment].length;
+  var packs = ["single", "grind", "post"].map(function(sg){ return recordPack(sg, items[sg].length, opened && recordsSegment === sg, opened); });
   var row = el("div", {class:"rp-row" + (opened ? " compact" : "")}, packs);
   wrap.appendChild(row);
-  recordsCtx = {wrap:wrap, row:row, packs:packs, regItems:regItems, postItems:postItems, hint:null, carousel:null, foot:null};
-  var legend = el("div", {class:"rc-legend", "aria-label":"Card rarity"}, RECORD_TIERS.slice().reverse().map(function(t){
-    return el("span", {class:"rl-chip t-" + t.k}, [t.name, el("small", {}, [t.desc])]);
-  }));
+  recordsCtx = {wrap:wrap, row:row, packs:packs, items:items, hint:null, carousel:null, foot:null, legend:null};
   if (!opened){
-    recordsCtx.hint = el("p", {class:"rp-hint"}, ["Rip open a pack to deal out the league's records. The longer a record has stood, the rarer its card."]);
+    recordsCtx.hint = el("p", {class:"rp-hint"}, ["Rip open a pack to deal out the league's records: single-game marks, streaks and season-long runs, and the playoffs."]);
     wrap.appendChild(recordsCtx.hint);
-    wrap.appendChild(legend);
     return;
   }
-  var items = recordsSegment === "post" ? postItems : regItems;
   var deal = recordsDeal; recordsDeal = false;
-  recordsCtx.carousel = buildRecordCarousel(items, deal);
+  recordsCtx.carousel = buildRecordCarousel(items[recordsSegment], deal);
   wrap.appendChild(recordsCtx.carousel);
-  wrap.appendChild(legend);
-  wrap.appendChild(recordsCtx.foot = el("p", {class:"foot-note rc-hint"}, ["Rarity is how many weeks in a row the record has stood. Drag, swipe or use the arrow keys to flip through the cards; tap the front card to open that team."]));
+  wrap.appendChild(recordsCtx.legend = tierLegend(recordsSegment));
+  wrap.appendChild(recordsCtx.foot = el("p", {class:"foot-note rc-hint"}, [recordsFootText(recordsSegment)]));
 }
 
 /* =====================================================================
