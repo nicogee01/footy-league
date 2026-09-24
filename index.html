@@ -5551,6 +5551,7 @@ var analyticsSeasonIdx = null;
 
 var analyticsModule = "team";
 var analyticsTeam = null;
+var analyticsHeatAvg = false;
 var analyticsBooted = false;
 var DA_MODULES = [
   {k:"team", code:"00", name:"Team scout", short:"Teams", sub:"Team vs league"},
@@ -6132,16 +6133,23 @@ function renderAnalytics(app){
             el("div", {class:"legend-item"}, [el("b", {}, ["Top-right"]), " = shootouts"])
           ])])];
     } else if (analyticsModule === "heat"){
-      var weekSel = el("select", {class:"ctrl", "aria-label":"Week", onchange:function(e){ analyticsWeek = parseInt(e.target.value, 10); paint(); }});
-      weeks.forEach(function(w){ var o = el("option", {value:w}, ["Week " + w]); if (w === analyticsWeek) o.selected = true; weekSel.appendChild(o); });
+      var weekSel = el("select", {class:"ctrl", "aria-label":"Week or season average", onchange:function(e){
+        if (e.target.value === "avg") analyticsHeatAvg = true; else { analyticsHeatAvg = false; analyticsWeek = parseInt(e.target.value, 10); }
+        paint();
+      }});
+      var ao = el("option", {value:"avg"}, ["Season average"]); if (analyticsHeatAvg) ao.selected = true; weekSel.appendChild(ao);
+      weeks.forEach(function(w){ var o = el("option", {value:w}, ["Week " + w]); if (!analyticsHeatAvg && w === analyticsWeek) o.selected = true; weekSel.appendChild(o); });
+      var span = analyticsHeatAvg ? "the season" : "that week";
       parts = [daHead("03", "Position scoring", weekSel),
-        el("p", {class:"da-intro"}, ["Points started at each position that week. \"avg\" is that team's season average at the position; ▲/▼ shows whether this week beat it."]),
-        daPanel("Heat grid", "Week " + analyticsWeek, [el("div", {class:"chart-card"}, [buildHeatmap(season, analyticsWeek)]),
+        el("p", {class:"da-intro"}, [analyticsHeatAvg
+          ? "Each team's average points per week at each position this season. \"lg\" is the league average at the position; ▲/▼ shows whether the team is above or below it."
+          : "Points started at each position that week. \"avg\" is that team's season average at the position; ▲/▼ shows whether this week beat it."]),
+        daPanel("Heat grid", analyticsHeatAvg ? "Season average" : "Week " + analyticsWeek, [el("div", {class:"chart-card"}, [buildHeatmap(season, analyticsWeek, analyticsHeatAvg)]),
           el("div", {class:"chart-legend"}, [
-            el("div", {class:"legend-item"}, [el("span", {class:"legend-swatch", style:"background:" + heatColor(0) + ";"}), "Lowest that week"]),
+            el("div", {class:"legend-item"}, [el("span", {class:"legend-swatch", style:"background:" + heatColor(0) + ";"}), "Lowest over " + span]),
             el("div", {class:"legend-item"}, [el("span", {class:"legend-swatch", style:"background:" + heatColor(.5) + ";border:1px solid var(--line-strong);"}), "Middle of the pack"]),
-            el("div", {class:"legend-item"}, [el("span", {class:"legend-swatch", style:"background:" + heatColor(1) + ";"}), "Highest that week"]),
-            el("div", {class:"legend-item"}, ["▲ above season avg · ▼ below · ● about even"])
+            el("div", {class:"legend-item"}, [el("span", {class:"legend-swatch", style:"background:" + heatColor(1) + ";"}), "Highest over " + span]),
+            el("div", {class:"legend-item"}, [analyticsHeatAvg ? "▲ above league avg · ▼ below · ● about even" : "▲ above season avg · ▼ below · ● about even"])
           ])])];
     } else if (analyticsModule === "dist"){
       var posSel = el("select", {class:"ctrl", "aria-label":"Position", onchange:function(e){ analyticsPosition = e.target.value; paint(); }});
@@ -6322,15 +6330,20 @@ function computeSeasonPositionAverages(season){
   });
   return out;
 }
-function buildHeatmap(season, week){
+function buildHeatmap(season, week, avgMode){
   var rosterPositions = season.league.roster_positions;
-  var rows = (season.matchupsByWeek[week] || []).filter(function(e){ return season.rosterOwner[e.roster_id]; }).map(function(e){
-    var uid = season.rosterOwner[e.roster_id];
-    return {uid:uid, u:STATE.users[uid], breakdown: computePositionBreakdown(e, rosterPositions)};
-  });
+  var seasonAvg = computeSeasonPositionAverages(season);
+  // avgMode: each team's season average per position, compared against the league average
+  var rows = avgMode
+    ? Object.keys(seasonAvg).map(function(uid){ return {uid:uid, u:STATE.users[uid], breakdown:seasonAvg[uid]}; })
+    : (season.matchupsByWeek[week] || []).filter(function(e){ return season.rosterOwner[e.roster_id]; }).map(function(e){
+        var uid = season.rosterOwner[e.roster_id];
+        return {uid:uid, u:STATE.users[uid], breakdown: computePositionBreakdown(e, rosterPositions)};
+      });
   var wrap = el("div", {class:"heat-table-wrap"});
   if (!rows.length){ wrap.appendChild(el("p",{class:"foot-note"},["No data for this week."])); return wrap; }
-  var seasonAvg = computeSeasonPositionAverages(season);
+  var lgAvg = {};
+  POSITION_COLS.forEach(function(pos){ var t = 0; rows.forEach(function(r){ t += r.breakdown[pos] || 0; }); lgAvg[pos] = t / rows.length; });
   var ranks = {}, minmax = {};
   POSITION_COLS.forEach(function(pos){
     var rk = {};
@@ -6354,11 +6367,11 @@ function buildHeatmap(season, week){
       var v = r.breakdown[pos]||0;
       var mm = minmax[pos];
       var t = mm.max>mm.min ? (v-mm.min)/(mm.max-mm.min) : 0.5;
-      var avg = (seasonAvg[r.uid] && seasonAvg[r.uid][pos]) || 0;
+      var avg = avgMode ? lgAvg[pos] : ((seasonAvg[r.uid] && seasonAvg[r.uid][pos]) || 0);
       var arrow = v > avg + 0.25 ? "▲" : (v < avg - 0.25 ? "▼" : "●");
       tr.appendChild(el("td", {class:"heat-cell", style:"background:"+heatColor(t)+";"}, [
         el("div", {class:"heat-val"}, [fmt1(v), el("span",{class:"heat-arrow", "aria-label": arrow==="▲" ? "above average" : arrow==="▼" ? "below average" : "about average"},[" "+arrow])]),
-        el("div", {class:"heat-rank"}, ["avg " + fmt1(avg) + " · #" + ranks[pos][r.uid]])
+        el("div", {class:"heat-rank"}, [(avgMode ? "lg " : "avg ") + fmt1(avg) + " · #" + ranks[pos][r.uid]])
       ]));
     });
     tbody.appendChild(tr);
