@@ -2215,6 +2215,22 @@
   .dr-tag.moved{background:rgba(79,143,232,.16);color:#8fb8f2;}
   @media (max-width:900px){ .dr-top{grid-template-columns:minmax(0,1fr);} .dr-hint{display:none;} }
   @media (max-width:640px){ .dr-arrows{display:none;} .dr-div{display:none;} }
+
+  /* draft board: bigger cards and headshots */
+  .dr-grid{gap:8px;}
+  .dr-pick{min-height:124px;padding:10px 12px 11px 14px;gap:8px;}
+  .dr-ptop{font-size:12.5px;}
+  .dr-who{gap:11px;}
+  .dr-img{width:50px;height:50px;border:2px solid var(--pc);box-shadow:0 4px 10px -4px rgba(0,0,0,.7);}
+  .dr-nm b{font-size:16px;}
+  .dr-nm small{font-size:12px;}
+  .dr-logo{width:16px;height:16px;}
+  .dr-rank{font-size:14.5px;}
+  .dr-team .avatar,.dr-team .avatar-fallback{width:38px;height:38px;font-size:13px;}
+  .dr-tname{font-size:14px;}
+  .dr-spot{grid-template-columns:46px minmax(0,1fr) auto;}
+  .dr-simg{width:46px;height:46px;}
+  .dr-sname b{font-size:15.5px;}
 </style>
 </head>
 <body>
@@ -2237,7 +2253,7 @@
       <a href="#draft" data-nav="draft">Draft</a>
       <a href="#victory" data-nav="victory">Victory Road</a>
       <a href="#transactions" data-nav="transactions">Transactions</a>
-      <a href="#analytics" data-nav="analytics">Analytics<span class="dev-tag">Dev</span></a>
+      <a href="#analytics" data-nav="analytics">Analytics</a>
       <a href="#info" data-nav="info">League Info</a>
     </nav>
     <div class="header-actions">
@@ -2265,7 +2281,7 @@
     <a href="#draft" data-nav="draft"><small>05</small>Draft Board</a>
     <a href="#victory" data-nav="victory"><small>06</small>Victory Road</a>
     <a href="#transactions" data-nav="transactions"><small>07</small>Transactions</a>
-    <a href="#analytics" data-nav="analytics"><small>08</small>Analytics<span class="dev-tag">Under development</span></a>
+    <a href="#analytics" data-nav="analytics"><small>08</small>Analytics</a>
     <a href="#info" data-nav="info"><small>09</small>League Info</a>
   </nav>
   <div class="drawer-foot">
@@ -7343,7 +7359,7 @@ function paintDraft(body, M){
     ])
   ]));
   // ---- board ----
-  var grid = el("div", {class:"dr-grid", style:"grid-template-columns:64px repeat(" + M.teams + ", 172px)"});
+  var grid = el("div", {class:"dr-grid", style:"grid-template-columns:64px repeat(" + M.teams + ", 206px)"});
   grid.appendChild(el("div", {class:"dr-corner"}, ["Round"]));
   for (var sl = 1; sl <= M.teams; sl++){
     (function(sl){
